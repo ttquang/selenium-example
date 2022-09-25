@@ -1,6 +1,8 @@
-package com.example.test;
+package com.quangtt.testengine.model.testelement;
 
-import com.example.exception.StepRuntimeException;
+import com.quangtt.testengine.exception.StepRuntimeException;
+import com.quangtt.testengine.model.property.IPropertyHandler;
+import com.quangtt.testengine.model.teststep.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -12,53 +14,51 @@ import org.openqa.selenium.support.ui.Select;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestCase implements ITestCase {
-    private List<Step> steps;
+    private List<TestStep> testSteps;
 
     private WebDriver webDriver;
 
-    private Map<String, String> properties;
+    private IPropertyHandler propertyHandler;
 
-    public TestCase(List<Step> steps, WebDriver webDriver, Map<String, String> properties) {
-        this.steps = steps;
+    public TestCase(List<TestStep> testSteps, WebDriver webDriver, IPropertyHandler propertyHandler) {
+        this.testSteps = testSteps;
         this.webDriver = webDriver;
-        this.properties = properties;
+        this.propertyHandler = propertyHandler;
     }
 
     public void run() {
         webDriver.manage().timeouts().pageLoadTimeout(Duration.of(30, ChronoUnit.MINUTES));
-        webDriver.get("http://localhost:7001/clos/");
+//        webDriver.get("http://localhost:7001/clos/");
+        webDriver.get("http://192.168.1.24:7001/clos/");
 //        driver.get("http://172.24.1.90:7002/clos");
 
-//        webDriver.switchTo().frame(0);
-
-        for (Step step : steps) {
+        for (TestStep testStep : testSteps) {
             try {
-                step.run(this);
+                testStep.run(this);
             } catch (StepRuntimeException ex) {
-                throw new StepRuntimeException(step.getName(), step.getName());
+                throw new StepRuntimeException(testStep.getName(), testStep.getName());
             } catch (Exception ex) {
-                throw new StepRuntimeException(step.getName(), step.getName());
+                throw new StepRuntimeException(testStep.getName(), testStep.getName());
             } finally {
-                System.out.println(properties);
+//                System.out.println(propertyHandler);
             }
         }
     }
 
 
     @Override
-    public void visit(ClickStep step) {
+    public void visit(ClickTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         findElement(selector).click();
     }
 
     @Override
-    public void visit(DelayStep step) {
+    public void visit(DelayTestStep step) {
         System.out.println(step);
         try {
             Thread.sleep(1000);
@@ -69,7 +69,7 @@ public class TestCase implements ITestCase {
     }
 
     @Override
-    public void visit(InputStep step) {
+    public void visit(InputTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         String value = propertyParser(step.getValue());
@@ -77,7 +77,7 @@ public class TestCase implements ITestCase {
     }
 
     @Override
-    public void visit(InputSelectStep step) {
+    public void visit(InputSelectTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         Select select = new Select(findElement(selector));
@@ -101,25 +101,25 @@ public class TestCase implements ITestCase {
     }
 
     @Override
-    public void visit(SetPropertyStep step) {
+    public void visit(SetPropertyTestStep step) {
         System.out.println(step);
         String key = propertyParser(step.getKey());
         String value = propertyParser(step.getValue());
-        properties.put(key, value);
+        propertyHandler.put(key, value);
     }
 
     @Override
-    public void visit(TransferPropertyStep step) {
+    public void visit(TransferPropertyTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         String key = propertyParser(step.getKey());
         String value = findElement(selector).getAttribute("value");
         System.out.println(key + "=========" + value);
-        properties.put(key, value);
+        propertyHandler.put(key, value);
     }
 
     @Override
-    public void visit(SwitchFrameStep step) {
+    public void visit(SwitchFrameTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         webDriver.switchTo().frame(findElement(selector).getAttribute("id"));
@@ -131,9 +131,7 @@ public class TestCase implements ITestCase {
         Pattern pattern = Pattern.compile("\\{(.*)}");
         Matcher m = pattern.matcher(input);
         if (m.find()) {
-            if (properties.containsKey(m.group(1))) {
-                result = input.replaceFirst("\\{(.*)}", properties.get(m.group(1)));
-            }
+            result = input.replaceFirst("\\{(.*)}", propertyHandler.get(m.group(1)));
         }
 
         return result;

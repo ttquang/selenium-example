@@ -1,4 +1,4 @@
-package com.example.exception;
+package com.quangtt.testengine.exception;
 
 public class StepRuntimeException extends RuntimeException {
 

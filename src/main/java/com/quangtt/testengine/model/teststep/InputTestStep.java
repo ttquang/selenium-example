@@ -1,10 +1,12 @@
-package com.example.test;
+package com.quangtt.testengine.model.teststep;
 
-public class InputStep extends ElementStep {
+import com.quangtt.testengine.model.testelement.ITestCase;
+
+public class InputTestStep extends ElementTestStep {
 
     protected String value;
 
-    public InputStep(String name, String selector, String value) {
+    public InputTestStep(String name, String selector, String value) {
         super(name, selector);
         this.value = value;
     }

@@ -1,10 +1,12 @@
-package com.example.test;
+package com.quangtt.testengine.model.teststep;
 
-public class TransferPropertyStep extends SetPropertyStep {
+import com.quangtt.testengine.model.testelement.ITestCase;
+
+public class TransferPropertyTestStep extends SetPropertyTestStep {
 
     private String selector;
 
-    public TransferPropertyStep(String name, String key, String selector) {
+    public TransferPropertyTestStep(String name, String key, String selector) {
         super(name, key);
         this.selector = selector;
     }

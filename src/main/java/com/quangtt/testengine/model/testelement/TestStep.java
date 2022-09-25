@@ -1,10 +1,10 @@
-package com.example.test;
+package com.quangtt.testengine.model.testelement;
 
-public abstract class Step {
+public abstract class TestStep {
 
     private String name;
 
-    public Step(String name) {
+    public TestStep(String name) {
         this.name = name;
     }
 

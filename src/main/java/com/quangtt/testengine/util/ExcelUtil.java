@@ -1,6 +1,7 @@
-package com.example.excel;
+package com.quangtt.testengine.util;
 
-import com.example.test.*;
+import com.quangtt.testengine.model.testelement.TestStep;
+import com.quangtt.testengine.model.teststep.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,43 +35,43 @@ public class ExcelUtil {
         }
     };
 
-    public List<Step> process(File file) throws IOException, InvalidFormatException {
+    public List<TestStep> process(File file) throws IOException, InvalidFormatException {
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
 
-        List<Step> result = new ArrayList<>();
+        List<TestStep> result = new ArrayList<>();
 
         for (int i = 1; i < sheet.getLastRowNum() + 1; i++) {
             Row row = sheet.getRow(i);
             String type = VALUE_EXTRACTION.apply(row.getCell(1));
-            Step step = null;
+            TestStep testStep = null;
 
             switch (type) {
                 case "Input" :
-                    step = new InputStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
+                    testStep = new InputTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "Click" :
-                    step = new ClickStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    testStep = new ClickTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
                     break;
                 case "Delay" :
-                    step = new DelayStep(VALUE_EXTRACTION.apply(row.getCell(0)));
+                    testStep = new DelayTestStep(VALUE_EXTRACTION.apply(row.getCell(0)));
                     break;
                 case "InputSelect" :
-                    step = new InputSelectStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
+                    testStep = new InputSelectTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "TransferProperty" :
-                    step = new TransferPropertyStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(3)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    testStep = new TransferPropertyTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(3)),VALUE_EXTRACTION.apply(row.getCell(2)));
                     break;
                 case "SetProperty" :
-                    step = new SetPropertyStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
+                    testStep = new SetPropertyTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "SwitchFrame" :
-                    step = new SwitchFrameStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    testStep = new SwitchFrameTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
                     break;
 
             }
 
-            result.add(step);
+            result.add(testStep);
         }
 
         return result;
