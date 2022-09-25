@@ -48,16 +48,16 @@ public class ExcelUtil {
 
             switch (type) {
                 case "Input" :
-                    testStep = new InputTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
+                    testStep = new InputTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(4)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "Click" :
-                    testStep = new ClickTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    testStep = new ClickTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(4)),VALUE_EXTRACTION.apply(row.getCell(2)));
                     break;
                 case "Delay" :
                     testStep = new DelayTestStep(VALUE_EXTRACTION.apply(row.getCell(0)));
                     break;
                 case "InputSelect" :
-                    testStep = new InputSelectTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
+                    testStep = new InputSelectTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(4)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "TransferProperty" :
                     testStep = new TransferPropertyTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(3)),VALUE_EXTRACTION.apply(row.getCell(2)));
@@ -66,7 +66,10 @@ public class ExcelUtil {
                     testStep = new SetPropertyTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)),VALUE_EXTRACTION.apply(row.getCell(3)));
                     break;
                 case "SwitchFrame" :
-                    testStep = new SwitchFrameTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    testStep = new SwitchFrameTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(4)),VALUE_EXTRACTION.apply(row.getCell(2)));
+                    break;
+                case "LoadPage" :
+                    testStep = new LoadPageTestStep(VALUE_EXTRACTION.apply(row.getCell(0)),VALUE_EXTRACTION.apply(row.getCell(2)));
                     break;
 
             }

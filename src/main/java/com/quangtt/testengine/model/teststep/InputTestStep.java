@@ -6,8 +6,8 @@ public class InputTestStep extends ElementTestStep {
 
     protected String value;
 
-    public InputTestStep(String name, String selector, String value) {
-        super(name, selector);
+    public InputTestStep(String name, String delayPeriod, String selector, String value) {
+        super(name, delayPeriod, selector);
         this.value = value;
     }
 
@@ -16,7 +16,7 @@ public class InputTestStep extends ElementTestStep {
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    protected void delegate(ITestCase testCase) {
         testCase.visit(this);
     }
 

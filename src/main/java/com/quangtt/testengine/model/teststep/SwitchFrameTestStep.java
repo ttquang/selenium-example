@@ -4,12 +4,12 @@ import com.quangtt.testengine.model.testelement.ITestCase;
 
 public class SwitchFrameTestStep extends ElementTestStep {
 
-    public SwitchFrameTestStep(String name, String selector) {
-        super(name, selector);
+    public SwitchFrameTestStep(String name, String delayPeriod, String selector) {
+        super(name, delayPeriod, selector);
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    protected void delegate(ITestCase testCase) {
         testCase.visit(this);
     }
 

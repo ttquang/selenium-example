@@ -5,4 +5,6 @@ public interface IPropertyHandler {
 
     void put(String key, String value);
 
+    IPropertyHandler generateSubHandler(String level, IPropertyHandler propertyHandler);
+
 }

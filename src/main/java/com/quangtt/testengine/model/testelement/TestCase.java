@@ -17,23 +17,30 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TestCase implements ITestCase {
+public class TestCase extends TestElement implements ITestCase {
     private List<TestStep> testSteps;
 
     private WebDriver webDriver;
 
     private IPropertyHandler propertyHandler;
 
-    public TestCase(List<TestStep> testSteps, WebDriver webDriver, IPropertyHandler propertyHandler) {
+    public TestCase(String name, List<TestStep> testSteps) {
+        super(name);
         this.testSteps = testSteps;
-        this.webDriver = webDriver;
+    }
+
+    public void setPropertyHandler(IPropertyHandler propertyHandler) {
         this.propertyHandler = propertyHandler;
+    }
+
+    public void setWebDriver(WebDriver webDriver) {
+        this.webDriver = webDriver;
     }
 
     public void run() {
         webDriver.manage().timeouts().pageLoadTimeout(Duration.of(30, ChronoUnit.MINUTES));
 //        webDriver.get("http://localhost:7001/clos/");
-        webDriver.get("http://192.168.1.24:7001/clos/");
+//        webDriver.get("http://192.168.1.24:7001/clos/");
 //        driver.get("http://172.24.1.90:7002/clos");
 
         for (TestStep testStep : testSteps) {
@@ -123,6 +130,13 @@ public class TestCase implements ITestCase {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
         webDriver.switchTo().frame(findElement(selector).getAttribute("id"));
+    }
+
+    @Override
+    public void visit(LoadPageTestStep step) {
+        System.out.println(step);
+        String url = propertyParser(step.getUrl());
+        webDriver.get(url);
     }
 
     private String propertyParser(String input) {

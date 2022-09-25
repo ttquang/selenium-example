@@ -4,12 +4,12 @@ import com.quangtt.testengine.model.testelement.ITestCase;
 
 public class InputSelectTestStep extends InputTestStep {
 
-    public InputSelectTestStep(String name, String selector, String value) {
-        super(name, selector, value);
+    public InputSelectTestStep(String name, String delayPeriod, String selector, String value) {
+        super(name, delayPeriod, selector, value);
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    protected void delegate(ITestCase testCase) {
         testCase.visit(this);
     }
 

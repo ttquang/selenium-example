@@ -1,6 +1,7 @@
 package com.quangtt.testengine;
 
 import com.quangtt.testengine.exception.StepRuntimeException;
+import com.quangtt.testengine.model.testelement.TestSuite;
 import com.quangtt.testengine.util.ExcelUtil;
 import com.quangtt.testengine.model.property.IPropertyHandler;
 import com.quangtt.testengine.model.property.PropertyHandler;
@@ -15,8 +16,7 @@ import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
-        System.setProperty("webdriver.chrome.driver",
-                "D:\\webdriver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "D:\\webdriver\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
         try {
@@ -24,11 +24,10 @@ public class Application {
             File file = new File("D:\\Selenium-Testcase.xlsx");
             List<TestStep> testSteps = util.process(file);
 
-            IPropertyHandler testSuiteProperty = new PropertyHandler("TestSuite");
-            IPropertyHandler testCaseProperty = new PropertyHandler("TestCase", testSuiteProperty);
-
-            ITestCase testCase = new TestCase(testSteps, driver, testCaseProperty);
-            testCase.run();
+            TestSuite testSuite = new TestSuite("TestSuite-1", driver);
+            ITestCase testCase = new TestCase("TestCase-1", testSteps);
+            testSuite.addTestCase(testCase);
+            testSuite.run();
         } catch (StepRuntimeException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {

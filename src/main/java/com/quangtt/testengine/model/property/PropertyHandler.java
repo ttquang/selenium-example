@@ -51,5 +51,9 @@ public class PropertyHandler implements IPropertyHandler {
         }
     }
 
+    @Override
+    public IPropertyHandler generateSubHandler(String level, IPropertyHandler propertyHandler) {
+        return new  PropertyHandler(level, propertyHandler);
+    }
 
 }

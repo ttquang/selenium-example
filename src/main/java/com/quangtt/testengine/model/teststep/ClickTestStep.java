@@ -4,12 +4,12 @@ import com.quangtt.testengine.model.testelement.ITestCase;
 
 public class ClickTestStep extends ElementTestStep {
 
-    public ClickTestStep(String name, String selector) {
-        super(name, selector);
+    public ClickTestStep(String name, String delayPeriod, String selector) {
+        super(name, delayPeriod, selector);
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    protected void delegate(ITestCase testCase) {
         testCase.visit(this);
     }
 
