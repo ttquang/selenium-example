@@ -1,7 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
-
 public class TransferPropertyTestStep extends SetPropertyTestStep {
 
     private String selector;
@@ -16,7 +14,7 @@ public class TransferPropertyTestStep extends SetPropertyTestStep {
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    public void run() {
         testCase.visit(this);
     }
 

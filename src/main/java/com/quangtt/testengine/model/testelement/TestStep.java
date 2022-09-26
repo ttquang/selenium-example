@@ -4,6 +4,8 @@ public abstract class TestStep {
 
     private String name;
 
+    protected TestCase testCase;
+
     public TestStep(String name) {
         this.name = name;
     }
@@ -12,6 +14,10 @@ public abstract class TestStep {
         return name;
     }
 
-    public abstract void run(ITestCase testCase);
+    public void setTestCase(TestCase testCase) {
+        this.testCase = testCase;
+    }
+
+    public abstract void run();
 
 }

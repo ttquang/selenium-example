@@ -1,6 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
 import com.quangtt.testengine.model.testelement.TestStep;
 
 public class DelayTestStep extends TestStep {
@@ -10,7 +9,7 @@ public class DelayTestStep extends TestStep {
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    public void run() {
         testCase.visit(this);
     }
 

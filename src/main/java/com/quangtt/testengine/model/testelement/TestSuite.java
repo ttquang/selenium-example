@@ -4,7 +4,10 @@ package com.quangtt.testengine.model.testelement;
 import com.quangtt.testengine.model.property.IPropertyHandler;
 import com.quangtt.testengine.model.property.PropertyHandler;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +18,26 @@ public class TestSuite extends TestElement {
 
     private IPropertyHandler propertyHandler = new PropertyHandler("TestSuite");
 
-    public TestSuite(String name, WebDriver webDriver) {
+    public TestSuite(String name) {
         super(name);
-        this.webDriver = webDriver;
     }
 
     public void addTestCase(ITestCase testCase) {
         testCase.setPropertyHandler(propertyHandler.generateSubHandler("TestCase", propertyHandler));
-        testCase.setWebDriver(webDriver);
+        testCase.setTestSuite(this);
         testCases.add(testCase);
     }
 
     @Override
     public void run() {
+        this.webDriver = new ChromeDriver();
+        this.webDriver.manage().timeouts().pageLoadTimeout(Duration.of(30, ChronoUnit.MINUTES));
         for (ITestCase testCase:testCases) {
             testCase.run();
         }
+    }
+
+    public WebDriver getWebDriver() {
+        return webDriver;
     }
 }

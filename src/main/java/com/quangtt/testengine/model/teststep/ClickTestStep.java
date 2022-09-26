@@ -1,7 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
-
 public class ClickTestStep extends ElementTestStep {
 
     public ClickTestStep(String name, String delayPeriod, String selector) {
@@ -9,7 +7,7 @@ public class ClickTestStep extends ElementTestStep {
     }
 
     @Override
-    protected void delegate(ITestCase testCase) {
+    protected void delegate() {
         testCase.visit(this);
     }
 

@@ -1,7 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
-
 public class SetPropertyTestStep extends PropertyTestStep {
 
     protected String value;
@@ -20,7 +18,7 @@ public class SetPropertyTestStep extends PropertyTestStep {
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    public void run() {
         testCase.visit(this);
     }
 

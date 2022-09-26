@@ -1,7 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
-
 public class InputTestStep extends ElementTestStep {
 
     protected String value;
@@ -16,7 +14,7 @@ public class InputTestStep extends ElementTestStep {
     }
 
     @Override
-    protected void delegate(ITestCase testCase) {
+    protected void delegate() {
         testCase.visit(this);
     }
 

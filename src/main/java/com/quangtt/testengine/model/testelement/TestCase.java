@@ -5,7 +5,6 @@ import com.quangtt.testengine.model.property.IPropertyHandler;
 import com.quangtt.testengine.model.teststep.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -20,32 +19,33 @@ import java.util.regex.Pattern;
 public class TestCase extends TestElement implements ITestCase {
     private List<TestStep> testSteps;
 
-    private WebDriver webDriver;
+    private TestSuite testSuite;
 
     private IPropertyHandler propertyHandler;
 
     public TestCase(String name, List<TestStep> testSteps) {
         super(name);
         this.testSteps = testSteps;
+
+        for (TestStep testStep:this.testSteps) {
+            testStep.setTestCase(this);
+        }
     }
 
     public void setPropertyHandler(IPropertyHandler propertyHandler) {
         this.propertyHandler = propertyHandler;
     }
 
-    public void setWebDriver(WebDriver webDriver) {
-        this.webDriver = webDriver;
+    public void setTestSuite(TestSuite testSuite) {
+        this.testSuite = testSuite;
     }
 
     public void run() {
-        webDriver.manage().timeouts().pageLoadTimeout(Duration.of(30, ChronoUnit.MINUTES));
-//        webDriver.get("http://localhost:7001/clos/");
-//        webDriver.get("http://192.168.1.24:7001/clos/");
-//        driver.get("http://172.24.1.90:7002/clos");
+
 
         for (TestStep testStep : testSteps) {
             try {
-                testStep.run(this);
+                testStep.run();
             } catch (StepRuntimeException ex) {
                 throw new StepRuntimeException(testStep.getName(), testStep.getName());
             } catch (Exception ex) {
@@ -129,14 +129,14 @@ public class TestCase extends TestElement implements ITestCase {
     public void visit(SwitchFrameTestStep step) {
         System.out.println(step);
         String selector = propertyParser(step.getSelector());
-        webDriver.switchTo().frame(findElement(selector).getAttribute("id"));
+        this.testSuite.getWebDriver().switchTo().frame(findElement(selector).getAttribute("id"));
     }
 
     @Override
     public void visit(LoadPageTestStep step) {
         System.out.println(step);
         String url = propertyParser(step.getUrl());
-        webDriver.get(url);
+        this.testSuite.getWebDriver().get(url);
     }
 
     private String propertyParser(String input) {
@@ -153,12 +153,12 @@ public class TestCase extends TestElement implements ITestCase {
 
     private WebElement findElement(String selector) {
         try {
-            FluentWait wait = new FluentWait(webDriver);
+            FluentWait wait = new FluentWait(this.testSuite.getWebDriver());
             wait.withTimeout(Duration.of(1000, ChronoUnit.MILLIS));
             wait.pollingEvery(Duration.of(250, ChronoUnit.MILLIS));
             wait.ignoring(NoSuchElementException.class);
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(selector)));
-            return webDriver.findElement(By.xpath(selector));
+            return this.testSuite.getWebDriver().findElement(By.xpath(selector));
         } catch (Exception ex) {
             throw new StepRuntimeException();
         }

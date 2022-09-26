@@ -2,7 +2,6 @@ package com.quangtt.testengine.model.testelement;
 
 import com.quangtt.testengine.model.property.IPropertyHandler;
 import com.quangtt.testengine.model.teststep.*;
-import org.openqa.selenium.WebDriver;
 
 public interface ITestCase {
 
@@ -10,7 +9,7 @@ public interface ITestCase {
 
     void setPropertyHandler(IPropertyHandler propertyHandler);
 
-    void setWebDriver(WebDriver webDriver);
+    void setTestSuite(TestSuite testSuite);
 
     void visit(ClickTestStep step);
     void visit(DelayTestStep step);

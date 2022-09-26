@@ -1,6 +1,5 @@
 package com.quangtt.testengine.model.teststep;
 
-import com.quangtt.testengine.model.testelement.ITestCase;
 import com.quangtt.testengine.model.testelement.TestStep;
 
 public abstract class ElementTestStep extends TestStep {
@@ -20,7 +19,7 @@ public abstract class ElementTestStep extends TestStep {
     }
 
     @Override
-    public void run(ITestCase testCase) {
+    public void run() {
         Long delayPeriod1 = Long.valueOf(delayPeriod);
         if (delayPeriod1 > 0) {
             try {
@@ -30,8 +29,8 @@ public abstract class ElementTestStep extends TestStep {
                 throw new RuntimeException(e);
             }
         }
-        delegate(testCase);
+        delegate();
     }
 
-    protected abstract void delegate(ITestCase testCase);
+    protected abstract void delegate();
 }
