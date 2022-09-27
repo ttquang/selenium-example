@@ -23,7 +23,7 @@ public class TestSuite extends TestElement {
     }
 
     public void addTestCase(ITestCase testCase) {
-        testCase.setPropertyHandler(propertyHandler.generateSubHandler("TestCase", propertyHandler));
+        testCase.getPropertyHandler().setNextHandler(this.propertyHandler);
         testCase.setTestSuite(this);
         testCases.add(testCase);
     }
@@ -39,5 +39,9 @@ public class TestSuite extends TestElement {
 
     public WebDriver getWebDriver() {
         return webDriver;
+    }
+
+    public IPropertyHandler getPropertyHandler() {
+        return propertyHandler;
     }
 }

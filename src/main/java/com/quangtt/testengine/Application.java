@@ -1,14 +1,10 @@
 package com.quangtt.testengine;
 
 import com.quangtt.testengine.exception.StepRuntimeException;
-import com.quangtt.testengine.model.testelement.ITestCase;
-import com.quangtt.testengine.model.testelement.TestCase;
-import com.quangtt.testengine.model.testelement.TestStep;
 import com.quangtt.testengine.model.testelement.TestSuite;
 import com.quangtt.testengine.util.ExcelUtil;
 
 import java.io.File;
-import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
@@ -17,12 +13,8 @@ public class Application {
 
         try {
             ExcelUtil util = new ExcelUtil();
-            File file = new File("D:\\Selenium-Testcase.xlsx");
-            List<TestStep> testSteps = util.process(file);
-
-            TestSuite testSuite = new TestSuite("TestSuite-1");
-            ITestCase testCase = new TestCase("TestCase-1", testSteps);
-            testSuite.addTestCase(testCase);
+            File file = new File("D:\\Selenium-Testcase-TestSuite.xlsx");
+            TestSuite testSuite = util.processTestSuit(file);
             testSuite.run();
         } catch (StepRuntimeException ex) {
             ex.printStackTrace();

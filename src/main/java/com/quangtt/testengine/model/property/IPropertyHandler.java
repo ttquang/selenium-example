@@ -7,4 +7,6 @@ public interface IPropertyHandler {
 
     IPropertyHandler generateSubHandler(String level, IPropertyHandler propertyHandler);
 
+    void setNextHandler(IPropertyHandler nextPropertyHandler);
+
 }

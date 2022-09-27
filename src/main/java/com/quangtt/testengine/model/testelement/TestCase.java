@@ -2,6 +2,7 @@ package com.quangtt.testengine.model.testelement;
 
 import com.quangtt.testengine.exception.StepRuntimeException;
 import com.quangtt.testengine.model.property.IPropertyHandler;
+import com.quangtt.testengine.model.property.PropertyHandler;
 import com.quangtt.testengine.model.teststep.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,16 +13,21 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestCase extends TestElement implements ITestCase {
-    private List<TestStep> testSteps;
+    private List<TestStep> testSteps = new ArrayList<>();
 
     private TestSuite testSuite;
 
-    private IPropertyHandler propertyHandler;
+    private IPropertyHandler propertyHandler = new PropertyHandler("TestCase");;
+
+    public TestCase(String name) {
+        super(name);
+    }
 
     public TestCase(String name, List<TestStep> testSteps) {
         super(name);
@@ -32,6 +38,16 @@ public class TestCase extends TestElement implements ITestCase {
         }
     }
 
+    public void addTestStep(TestStep testStep) {
+        testStep.setTestCase(this);
+        this.testSteps.add(testStep);
+    }
+
+    public IPropertyHandler getPropertyHandler() {
+        return propertyHandler;
+    }
+
+    @Override
     public void setPropertyHandler(IPropertyHandler propertyHandler) {
         this.propertyHandler = propertyHandler;
     }

@@ -9,6 +9,8 @@ public interface ITestCase {
 
     void setPropertyHandler(IPropertyHandler propertyHandler);
 
+    IPropertyHandler getPropertyHandler();
+
     void setTestSuite(TestSuite testSuite);
 
     void visit(ClickTestStep step);

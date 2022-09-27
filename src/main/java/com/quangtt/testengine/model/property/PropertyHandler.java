@@ -56,4 +56,7 @@ public class PropertyHandler implements IPropertyHandler {
         return new  PropertyHandler(level, propertyHandler);
     }
 
+    public void setNextHandler(IPropertyHandler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
 }
