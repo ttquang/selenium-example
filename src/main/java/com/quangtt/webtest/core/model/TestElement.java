@@ -7,6 +7,10 @@ public abstract class TestElement {
 
     PropertyHandler propertyHandler;
 
+    public TestElement(String name) {
+        this.name = name;
+    }
+
     public abstract void run();
 
     public void putProperty(String key, String value) {
@@ -20,7 +24,5 @@ public abstract class TestElement {
     protected void constructPropertyHandler(PropertyLevel level, Map<String, String> properties) {
         this.propertyHandler = new PropertyHandler(level, properties);
     }
-
-    public abstract void constructPropertyHandler(Map<String, String> properties);
 
 }

@@ -1,7 +1,5 @@
 package com.quangtt.testengine.util;
 
-import com.quangtt.testengine.model.property.IPropertyHandler;
-import com.quangtt.testengine.model.property.PropertyHandler;
 import com.quangtt.testengine.model.testelement.TestCase;
 import com.quangtt.testengine.model.testelement.TestStep;
 import com.quangtt.testengine.model.testelement.TestSuite;

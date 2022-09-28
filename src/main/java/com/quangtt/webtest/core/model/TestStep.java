@@ -1,16 +1,24 @@
 package com.quangtt.webtest.core.model;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public abstract class TestStep extends TestElement {
     TestCase testCase;
+
+    long delayPeriod;
+
+    public TestStep(String name, long delayPeriod) {
+        super(name);
+        this.delayPeriod = delayPeriod;
+        this.constructPropertyHandler(PropertyLevel.TEST_STEP, new HashMap<>());
+    }
 
     public void run() {
         testCase.delegate(this);
     }
 
     @Override
-    public void constructPropertyHandler(Map<String, String> properties) {
-        constructPropertyHandler(PropertyLevel.TEST_STEP, properties);
+    public String toString() {
+        return "TestStep[" + name + "]," +  testCase.toString();
     }
 }
