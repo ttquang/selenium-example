@@ -13,6 +13,10 @@ public abstract class TestElement {
 
     public abstract void run();
 
+    public boolean isEnable() {
+        return true;
+    };
+
     public void putProperty(String key, String value) {
         propertyHandler.put(key, value);
     }

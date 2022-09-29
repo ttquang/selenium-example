@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,8 +31,9 @@ public class ExecutionEnvironment {
                 throw new RuntimeException(e);
             }
         }
-
-        if (testStep instanceof ClickElementTestStep) {
+        if (testStep instanceof ClickAllElementTestStep) {
+            execute((ClickAllElementTestStep) testStep);
+        } else if (testStep instanceof ClickElementTestStep) {
             execute((ClickElementTestStep) testStep);
         } else if (testStep instanceof InputSelectElementTestStep) {
             execute((InputSelectElementTestStep) testStep);
@@ -39,7 +41,7 @@ public class ExecutionEnvironment {
             execute((SetPropertyTestStep) testStep);
         } else if (testStep instanceof TransferPropertyTestStep) {
             execute((TransferPropertyTestStep) testStep);
-        } else if (testStep instanceof InputElementTestStep ) {
+        } else if (testStep instanceof InputElementTestStep) {
             execute((InputElementTestStep) testStep);
         } else if (testStep instanceof LoadPageTestStep) {
             execute((LoadPageTestStep) testStep);
@@ -51,6 +53,13 @@ public class ExecutionEnvironment {
     private void execute(ClickElementTestStep testStep) {
         String selector = testStep.getProperty(testStep.selector);
         findElement(selector).click();
+    }
+
+    private void execute(ClickAllElementTestStep testStep) {
+        String selector = testStep.getProperty(testStep.selector);
+        for (WebElement element : findElements(selector)) {
+            element.click();
+        }
     }
 
     public void execute(InputElementTestStep testStep) {
@@ -102,6 +111,20 @@ public class ExecutionEnvironment {
         String key = testStep.getProperty(testStep.key);
         String value = findElement(selector).getAttribute("value");
         testStep.putProperty(key, value);
+    }
+
+    private List<WebElement> findElements(String selector) {
+        try {
+            FluentWait wait = new FluentWait(webDriver);
+            wait.withTimeout(Duration.of(1000, ChronoUnit.MILLIS));
+            wait.pollingEvery(Duration.of(250, ChronoUnit.MILLIS));
+            wait.ignoring(NoSuchElementException.class);
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(selector)));
+            return webDriver.findElements(By.xpath(selector));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new StepRuntimeException();
+        }
     }
 
     private WebElement findElement(String selector) {

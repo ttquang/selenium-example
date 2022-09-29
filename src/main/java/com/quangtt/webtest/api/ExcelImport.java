@@ -85,6 +85,13 @@ public class ExcelImport {
                                     Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
                             );
                             break;
+                        case "ClickAll":
+                            testStep = new ClickAllElementTestStep(
+                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+                                    VALUE_EXTRACTION.apply(row.getCell(2)),
+                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                            );
+                            break;
                         case "InputSelect":
                             testStep = new InputSelectElementTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),

@@ -22,6 +22,10 @@ public class TestCase extends TestElement {
     }
 
     public void run() {
+        if (!isEnable()) {
+            return;
+        }
+
         for (TestStep testStep : testSteps) {
             try {
                 testStep.run();
@@ -35,6 +39,11 @@ public class TestCase extends TestElement {
 //                System.out.println(propertyHandler);
             }
         }
+    }
+
+    @Override
+    public boolean isEnable() {
+        return !Boolean.valueOf(propertyHandler.properties.get("disable"));
     }
 
     public void delegate(TestStep testStep) {
