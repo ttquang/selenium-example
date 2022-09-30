@@ -14,6 +14,15 @@ public class TestSuite extends TestElement {
         this.constructPropertyHandler(PropertyLevel.TEST_SUITE, new HashMap<>());
     }
 
+    @Override
+    public void execute() {
+        for (TestCase testCase : testCases) {
+            testCase.run();
+            System.out.println("TestCase[" + testCase.name + "]:PASSED");
+        }
+        System.out.println("TestSuite[" + name + "]:PASSED");
+    }
+
     public void addTestCase(TestCase testCase) {
         testCase.propertyHandler.nextHandler = this.propertyHandler;
         testCase.testSuite = this;
@@ -22,15 +31,7 @@ public class TestSuite extends TestElement {
 
     public void runWith(ExecutionEnvironment environment) {
         this.environment = environment;
-        for (TestCase testCase : testCases) {
-            testCase.run();
-            System.out.println("TestCase[" + testCase.name + "]:PASSED");
-        }
-        System.out.println("TestSuite[" + name + "]:PASSED");
-    }
-
-    public void run() {
-        throw new UnsupportedOperationException();
+        execute();
     }
 
     public void delegate(TestStep testStep) {

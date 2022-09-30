@@ -13,7 +13,7 @@ public abstract class TestStep extends TestElement {
         this.constructPropertyHandler(PropertyLevel.TEST_STEP, new HashMap<>());
     }
 
-    public void run() {
+    public void execute() {
         testCase.delegate(this);
     }
 

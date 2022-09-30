@@ -3,6 +3,8 @@ package com.quangtt.webtest.core.model;
 import java.util.Map;
 
 public abstract class TestElement {
+
+    static String DISABLE_PROPERTY_KEY = "disable";
     String name;
 
     PropertyHandler propertyHandler;
@@ -11,10 +13,16 @@ public abstract class TestElement {
         this.name = name;
     }
 
-    public abstract void run();
+    public abstract void execute();
+
+    public void run() {
+        if (isEnable()) {
+            execute();
+        }
+    }
 
     public boolean isEnable() {
-        return true;
+        return !Boolean.valueOf(propertyHandler.properties.get(DISABLE_PROPERTY_KEY));
     };
 
     public void putProperty(String key, String value) {

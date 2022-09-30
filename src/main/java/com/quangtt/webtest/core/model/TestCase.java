@@ -21,11 +21,7 @@ public class TestCase extends TestElement {
         this.testSteps.add(testStep);
     }
 
-    public void run() {
-        if (!isEnable()) {
-            return;
-        }
-
+    public void execute() {
         for (TestStep testStep : testSteps) {
             try {
                 testStep.run();
@@ -35,15 +31,8 @@ public class TestCase extends TestElement {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new StepRuntimeException(testStep);
-            } finally {
-//                System.out.println(propertyHandler);
             }
         }
-    }
-
-    @Override
-    public boolean isEnable() {
-        return !Boolean.valueOf(propertyHandler.properties.get("disable"));
     }
 
     public void delegate(TestStep testStep) {
