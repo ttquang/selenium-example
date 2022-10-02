@@ -8,4 +8,7 @@ public class SetPropertyTestStep extends PropertyTestStep {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
 }

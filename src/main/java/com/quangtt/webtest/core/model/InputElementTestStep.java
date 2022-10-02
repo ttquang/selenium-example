@@ -8,4 +8,7 @@ public class InputElementTestStep extends ElementTestStep {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
 }

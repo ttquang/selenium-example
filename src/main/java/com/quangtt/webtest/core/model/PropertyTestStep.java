@@ -8,4 +8,7 @@ public abstract class PropertyTestStep extends TestStep {
         this.key = key;
     }
 
+    public String getKey() {
+        return key;
+    }
 }

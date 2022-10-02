@@ -8,4 +8,7 @@ public class TransferPropertyTestStep extends PropertyTestStep {
         this.selector = selector;
     }
 
+    public String getSelector() {
+        return selector;
+    }
 }

@@ -9,4 +9,7 @@ public class LoadPageTestStep extends TestStep {
         this.url = url;
     }
 
+    public String getUrl() {
+        return url;
+    }
 }

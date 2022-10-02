@@ -7,9 +7,10 @@ import java.util.Map;
 
 public class TestSuite extends TestElement {
     List<TestCase> testCases = new ArrayList<>();
+
     Map<String, Integer> loopTimes = new HashMap<>();
 
-    ExecutionEnvironment environment;
+    IExecutionEnvironment environment;
 
     public TestSuite(String name) {
         super(name);
@@ -39,7 +40,7 @@ public class TestSuite extends TestElement {
         this.testCases.add(testCase);
     }
 
-    public void runWith(ExecutionEnvironment environment) {
+    public void runWith(IExecutionEnvironment environment) {
         this.environment = environment;
         execute();
     }
