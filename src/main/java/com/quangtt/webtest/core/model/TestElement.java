@@ -37,4 +37,13 @@ public abstract class TestElement {
         this.propertyHandler = new PropertyHandler(level, properties);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

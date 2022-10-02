@@ -39,8 +39,4 @@ public class TestCase extends TestElement {
         testSuite.delegate(testStep);
     }
 
-    @Override
-    public String toString() {
-        return "TestCase[" + name + "]," +  testSuite.toString();
-    }
 }

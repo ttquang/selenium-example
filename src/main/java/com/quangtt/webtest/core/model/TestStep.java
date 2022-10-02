@@ -17,8 +17,4 @@ public abstract class TestStep extends TestElement {
         testCase.delegate(this);
     }
 
-    @Override
-    public String toString() {
-        return "TestStep[" + name + "]," +  testCase.toString();
-    }
 }

@@ -3,9 +3,11 @@ package com.quangtt.webtest.core.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestSuite extends TestElement {
     List<TestCase> testCases = new ArrayList<>();
+    Map<String, Integer> loopTimes = new HashMap<>();
 
     ExecutionEnvironment environment;
 
@@ -17,13 +19,21 @@ public class TestSuite extends TestElement {
     @Override
     public void execute() {
         for (TestCase testCase : testCases) {
-            testCase.run();
+            int loopTime = loopTimes.get(testCase.name);
+            for (int i = 0; i < loopTime; i++) {
+                testCase.run();
+            }
             System.out.println("TestCase[" + testCase.name + "]:PASSED");
         }
         System.out.println("TestSuite[" + name + "]:PASSED");
     }
 
     public void addTestCase(TestCase testCase) {
+        addTestCase(testCase, 1);
+    }
+
+    public void addTestCase(TestCase testCase, int loopTime) {
+        loopTimes.put(testCase.name, loopTime);
         testCase.propertyHandler.nextHandler = this.propertyHandler;
         testCase.testSuite = this;
         this.testCases.add(testCase);
@@ -38,8 +48,4 @@ public class TestSuite extends TestElement {
         this.environment.delegate(testStep);
     }
 
-    @Override
-    public String toString() {
-        return "TestSuite[" + name + "]";
-    }
 }
