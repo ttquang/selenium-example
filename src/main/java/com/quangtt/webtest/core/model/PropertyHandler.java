@@ -1,14 +1,12 @@
 package com.quangtt.webtest.core.model;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PropertyHandler {
 
-    static Pattern GET_PATTERN = Pattern.compile(".*(\\{(.*)#(.*)}).*");
-    static Pattern PUT_PATTERN = Pattern.compile("(.*)#(.*)");
+    static Pattern PROPERTY_PATTERN = Pattern.compile("(Environment|TestSuite|TestCase|TestStep)#([\\w\\d]+)");
 
     PropertyLevel level;
     Map<String, String> properties;
@@ -20,7 +18,7 @@ public class PropertyHandler {
     }
 
     void put(String key, String value) {
-        Matcher m = PUT_PATTERN.matcher(key);
+        Matcher m = PROPERTY_PATTERN.matcher(key);
         if (m.find()) {
             if (this.level == PropertyLevel.valueOfLabel(m.group(1))) {
                 properties.put(m.group(2), value);
@@ -33,18 +31,22 @@ public class PropertyHandler {
     }
 
     String get(String key) {
-        Matcher m = GET_PATTERN.matcher(key);
-        if (m.find()) {
-            if (this.level == PropertyLevel.valueOfLabel(m.group(2))) {
-                return get(key.replace(m.group(1), properties.get(m.group(3))));
+        Matcher m = PROPERTY_PATTERN.matcher(key);
+        String result = key;
+
+        do {
+            String placeHolder = m.group();
+            String value;
+            if (this.level == PropertyLevel.valueOfLabel(m.group(1))) {
+                value = properties.get(m.group(2));
             } else {
-                if (Objects.nonNull(this.nextHandler)) {
-                    return this.nextHandler.get(key);
-                }
-                return key;
+                value = this.nextHandler.get(m.group(2));
             }
-        }
-        return key;
+            result.replace(placeHolder, value);
+            m = PROPERTY_PATTERN.matcher(result);
+        } while (m.find());
+
+        return result;
     }
 
 }

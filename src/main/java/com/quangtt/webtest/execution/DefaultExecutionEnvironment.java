@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExecutionEnvironment extends IExecutionEnvironment{
+public class DefaultExecutionEnvironment extends ExecutionEnvironment {
     WebDriver webDriver;
 
-    public ExecutionEnvironment(WebDriver webDriver) {
+    public DefaultExecutionEnvironment(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
 

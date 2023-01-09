@@ -10,7 +10,7 @@ public class TestSuite extends TestElement {
 
     Map<String, Integer> loopTimes = new HashMap<>();
 
-    IExecutionEnvironment environment;
+    ExecutionEnvironment environment;
 
     public TestSuite(String name) {
         super(name);
@@ -40,7 +40,7 @@ public class TestSuite extends TestElement {
         this.testCases.add(testCase);
     }
 
-    public void runWith(IExecutionEnvironment environment) {
+    public void runWith(ExecutionEnvironment environment) {
         this.environment = environment;
         execute();
     }

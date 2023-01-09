@@ -3,9 +3,9 @@ package com.quangtt.webtest;
 import com.quangtt.webtest.api.ExcelImport;
 import com.quangtt.webtest.api.WebDriverFactory;
 import com.quangtt.webtest.core.exception.StepRuntimeException;
-import com.quangtt.webtest.core.model.IExecutionEnvironment;
+import com.quangtt.webtest.core.model.ExecutionEnvironment;
 import com.quangtt.webtest.core.model.TestSuite;
-import com.quangtt.webtest.execution.ExecutionEnvironment;
+import com.quangtt.webtest.execution.DefaultExecutionEnvironment;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 
@@ -21,7 +21,7 @@ public class Application {
             TestSuite testSuite = excelImport.processTestSuit(file);
 
             webDriver = WebDriverFactory.get();
-            IExecutionEnvironment environment = new ExecutionEnvironment(webDriver);
+            ExecutionEnvironment environment = new DefaultExecutionEnvironment(webDriver);
 
             testSuite.runWith(environment);
         } catch (StepRuntimeException ex) {
