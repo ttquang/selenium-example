@@ -16,6 +16,6 @@ public class InputElementTestStep extends TestStep implements ElementAware {
 
     @Override
     public String getSelector() {
-        return null;
+        return selector;
     }
 }

@@ -44,7 +44,7 @@ public class DefaultExecutionEnvironment extends ExecutionEnvironment {
     public void execute(InputSelectElementTestStep testStep) {
         String selector = testStep.getProperty(testStep.getSelector());
         Select select = new Select(findElement(selector));
-        Pattern pattern = Pattern.compile("(.*)#(.*)");
+        Pattern pattern = Pattern.compile("(Index|Label|Value)#(.*)");
         Matcher m = pattern.matcher(testStep.getValue());
         if (m.find()) {
             String type = m.group(1);

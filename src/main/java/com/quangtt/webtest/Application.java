@@ -13,11 +13,11 @@ import java.io.File;
 
 public class Application {
     public static void main(String[] args) {
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, "D:\\webdriver\\chromedriver.exe");
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, "D:\\testTool\\webdriver\\chromedriver.exe");
         WebDriver webDriver = null;
         try {
             ExcelImport excelImport = new ExcelImport();
-            File file = new File("D:\\testTool\\testsuite\\TestSuite2.xlsx");
+            File file = new File("D:\\testTool\\testsuite\\TestSuite3.xlsx");
             TestSuite testSuite = excelImport.processTestSuit(file);
 
             webDriver = WebDriverFactory.get();
@@ -30,7 +30,7 @@ public class Application {
             ex.printStackTrace();
         } finally {
             try {
-                Thread.sleep(300000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class PropertyHandler {
 
-    static Pattern PROPERTY_PATTERN = Pattern.compile("(Environment|TestSuite|TestCase|TestStep)#([\\w\\d]+)");
+    static Pattern PROPERTY_PATTERN = Pattern.compile("\\{(Environment|TestSuite|TestCase|TestStep)#([\\w\\d]+)}");
 
     PropertyLevel level;
     Map<String, String> properties;
@@ -34,17 +34,17 @@ public class PropertyHandler {
         Matcher m = PROPERTY_PATTERN.matcher(key);
         String result = key;
 
-        do {
+        while (m.find()) {
             String placeHolder = m.group();
             String value;
             if (this.level == PropertyLevel.valueOfLabel(m.group(1))) {
                 value = properties.get(m.group(2));
             } else {
-                value = this.nextHandler.get(m.group(2));
+                value = this.nextHandler.get(placeHolder);
             }
-            result.replace(placeHolder, value);
+            result = result.replace(placeHolder, value);
             m = PROPERTY_PATTERN.matcher(result);
-        } while (m.find());
+        }
 
         return result;
     }
