@@ -1,5 +1,6 @@
 package com.quangtt.webtest.api;
 
+import com.quangtt.webtest.execution.WebDriverProxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverLogLevel;
@@ -26,6 +27,6 @@ public class WebDriverFactory {
 
         WebDriver webDriver = new ChromeDriver(chromeDriverService, options);
         webDriver.manage().timeouts().pageLoadTimeout(Duration.of(30, ChronoUnit.MINUTES));
-        return webDriver;
+        return new WebDriverProxy(webDriver);
     }
 }

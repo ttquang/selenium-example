@@ -1,6 +1,8 @@
 package com.quangtt.webtest.core.model;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class ExecutionEnvironment {
 
@@ -43,20 +45,69 @@ public abstract class ExecutionEnvironment {
         }
     }
 
-    public abstract void execute(ClickElementTestStep testStep);
+    public void execute(ClickElementTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        click(selector);
+    }
 
-    public abstract void execute(ClickAllElementTestStep testStep);
+    public void execute(ClickAllElementTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        clickAll(selector);
+    }
 
-    public abstract void execute(InputElementTestStep testStep);
+    public void execute(InputElementTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        String value = testStep.getProperty(testStep.getValue());
+        input(selector, value);
+    }
 
-    public abstract void execute(InputSelectElementTestStep testStep);
+    public void execute(InputSelectElementTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        String type = "Label";
+        String value = "";
+        Pattern pattern = Pattern.compile("(Index|Label|Value)#(.*)");
+        Matcher m = pattern.matcher(testStep.getValue());
+        if (m.find()) {
+            type = m.group(1);
+            value = testStep.getProperty(m.group(2));
+        }
+        select(selector, type, value);
+    }
 
-    public abstract void execute(LoadPageTestStep testStep);
+    public void execute(LoadPageTestStep testStep) {
+        String url = testStep.getProperty(testStep.getUrl());
+        get(url);
+    }
 
-    public abstract void execute(SwitchFrameTestStep testStep);
+    public void execute(SwitchFrameTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        switchTo(selector);
+    }
 
-    public abstract void execute(SetPropertyTestStep testStep);
+    public void execute(SetPropertyTestStep testStep) {
+        String key = testStep.getProperty(testStep.getKey());
+        String value = testStep.getProperty(testStep.getValue());
+        testStep.putProperty(key, value);
+    }
 
-    public abstract void execute(TransferPropertyTestStep testStep);
+    public void execute(TransferPropertyTestStep testStep) {
+        String selector = testStep.getProperty(testStep.getSelector());
+        String key = testStep.getProperty(testStep.getKey());
+        String value = getAttribute(selector,"value");
+        testStep.putProperty(key, value);
+    }
 
+    protected abstract void get(String url);
+
+    protected abstract void switchTo(String selector);
+
+    protected abstract void select(String selector, String type, String value);
+
+    protected abstract void click(String selector);
+
+    protected abstract void clickAll(String selector);
+
+    protected abstract void input(String selector, String value);
+
+    protected abstract String getAttribute(String selector, String attribute);
 }
