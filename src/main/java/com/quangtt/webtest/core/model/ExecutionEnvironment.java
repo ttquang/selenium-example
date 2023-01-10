@@ -1,6 +1,14 @@
 package com.quangtt.webtest.core.model;
 
+import java.util.Map;
+
 public abstract class ExecutionEnvironment {
+
+    PropertyHandler propertyHandler;
+
+    protected void constructPropertyHandler(PropertyLevel level, Map<String, String> properties) {
+        this.propertyHandler = new PropertyHandler(level, properties);
+    }
 
     private void delay(TestStep testStep) {
         if (testStep.delayPeriod > 0) {

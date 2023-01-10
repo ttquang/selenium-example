@@ -41,8 +41,20 @@ public class TestSuite extends TestElement {
     }
 
     public void runWith(ExecutionEnvironment environment) {
-        this.environment = environment;
+        plugIn(environment);
         execute();
+        unPlugin();
+
+    }
+
+    private void plugIn(ExecutionEnvironment environment) {
+        this.environment = environment;
+        this.propertyHandler.nextHandler = environment.propertyHandler;
+    }
+
+    private void unPlugin() {
+        this.environment = null;
+        this.propertyHandler.nextHandler = null;
     }
 
     public void delegate(TestStep testStep) {

@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Application {
     public static void main(String[] args) {
@@ -21,8 +23,17 @@ public class Application {
             TestSuite testSuite = excelImport.processTestSuit(file);
 
             webDriver = WebDriverFactory.get();
-            ExecutionEnvironment environment = new DefaultExecutionEnvironment(webDriver);
-
+            Map<String, String> properties = new HashMap<>();
+            properties.put("sec_admin_acc","RLOS1");
+            properties.put("sec_admin_pass","1");
+            properties.put("sec_admin_maker","SECURITY ADMIN MAKER");
+            properties.put("sec_admin_checker","SECURITY ADMIN CHECKER");
+            properties.put("username","AUTO.TEST.BO");
+            properties.put("role","100");
+            properties.put("branch","CN 1 - TP HCM - PGD DAKAO");
+            properties.put("prefer_lang","English");
+            properties.put("module","MPCHF");
+            ExecutionEnvironment environment = new DefaultExecutionEnvironment(webDriver, properties);
             testSuite.runWith(environment);
         } catch (StepRuntimeException ex) {
             ex.printStackTrace();

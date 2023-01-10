@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,10 @@ public class DefaultExecutionEnvironment extends ExecutionEnvironment {
 
     public DefaultExecutionEnvironment(WebDriver webDriver) {
         this.webDriver = webDriver;
+    }
+    public DefaultExecutionEnvironment(WebDriver webDriver, Map<String, String> properties) {
+        this.webDriver = webDriver;
+        constructPropertyHandler(PropertyLevel.ENVIRONMENT, properties);
     }
 
     public void execute(ClickElementTestStep testStep) {
