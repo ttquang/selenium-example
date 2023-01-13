@@ -1,6 +1,7 @@
 package com.quangtt.webtest.api;
 
 import com.quangtt.webtest.core.model.*;
+import com.quangtt.webtest.template.service.TemplateUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -46,9 +47,11 @@ public class ExcelImport {
     }
 
     public TestCase constructTestCase(Sheet testCaseSheet) {
-        TemplateUtil templateUtil = new TemplateUtil();
-        templateUtil.constructTemplate();
-        templateUtil.constructTemplateLogin();
+        TemplateUtils utils = new TemplateUtils();
+        utils.loadTemplate();
+        utils.compileTemplate();
+        utils.printTemplate();
+
         TestCase testCase = new TestCase(testCaseSheet.getSheetName());
 
         boolean inProcessingProperty = false;
@@ -59,7 +62,7 @@ public class ExcelImport {
 
             if ("Property".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = true;
-            } else if ("TestStep".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
+            } else if ("Step".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = false;
                 inProcessingTestStep = true;
             } else if ("END".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
@@ -70,77 +73,74 @@ public class ExcelImport {
                         testCase.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(3)));
                 } else if (inProcessingTestStep) {
                     String type = VALUE_EXTRACTION.apply(row.getCell(1));
-                    TestStep testStep = null;
+                    Step testStep = null;
 
                     switch (type) {
                         case "Input":
-                            testStep = new InputElementTestStep(
+                            testStep = new TextInputStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "Click":
-                            testStep = new ClickElementTestStep(
+                            testStep = new ClickStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "ClickAll":
                             testStep = new ClickAllElementTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "InputSelect":
-                            testStep = new InputSelectElementTestStep(
+                            testStep = new SelectInputStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "TransferProperty":
                             testStep = new TransferPropertyTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "SetProperty":
                             testStep = new SetPropertyTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "SwitchFrame":
-                            testStep = new SwitchFrameTestStep(
+                            testStep = new SwitchFrameStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "LoadPage":
-                            testStep = new LoadPageTestStep(
+                            testStep = new LoadPageStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "Template":
-                            List<TestStep> testSteps = templateUtil.get(VALUE_EXTRACTION.apply(row.getCell(2)));
-                            testSteps.forEach(testCase::addTestStep);
+                            List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
+                            List<Step> testSteps = utils.process(
+                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+                                    VALUE_EXTRACTION.apply(row.getCell(1)),
+                                    parameters
+                            );
+                            testSteps.forEach(testCase::addStep);
                             break;
                     }
 
                     if (Objects.nonNull(testStep)) {
-                        testCase.addTestStep(testStep);
+                        testCase.addStep(testStep);
                     }
 
                 }

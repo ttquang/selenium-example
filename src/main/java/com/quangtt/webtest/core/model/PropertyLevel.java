@@ -7,7 +7,7 @@ public enum PropertyLevel {
     ENVIRONMENT("Environment"),
     TEST_SUITE("TestSuite"),
     TEST_CASE("TestCase"),
-    TEST_STEP("TestStep");
+    TEST_STEP("Step");
 
     public final String label;
     private static final Map<String, PropertyLevel> BY_LABEL = new HashMap<>();

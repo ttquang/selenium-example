@@ -1,12 +1,12 @@
 package com.quangtt.webtest.core.exception;
 
-import com.quangtt.webtest.core.model.TestStep;
+import com.quangtt.webtest.core.model.Step;
 
 public class StepRuntimeException extends RuntimeException {
 
     public StepRuntimeException() {}
 
-    public StepRuntimeException(TestStep testStep) {
+    public StepRuntimeException(Step testStep) {
         super(testStep.toString());
     }
 

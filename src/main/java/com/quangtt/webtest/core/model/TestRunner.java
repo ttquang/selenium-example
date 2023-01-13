@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class ExecutionEnvironment {
+public abstract class TestRunner {
 
     PropertyHandler propertyHandler;
 
@@ -12,40 +12,27 @@ public abstract class ExecutionEnvironment {
         this.propertyHandler = new PropertyHandler(level, properties);
     }
 
-    private void delay(TestStep testStep) {
-        if (testStep.delayPeriod > 0) {
-            try {
-                Thread.sleep(testStep.delayPeriod);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void delegate(TestStep testStep) {
-        delay(testStep);
-
+    public void delegate(Step testStep) {
         if (testStep instanceof ClickAllElementTestStep) {
             execute((ClickAllElementTestStep) testStep);
-        } else if (testStep instanceof ClickElementTestStep) {
-            execute((ClickElementTestStep) testStep);
-        } else if (testStep instanceof InputSelectElementTestStep) {
-            execute((InputSelectElementTestStep) testStep);
+        } else if (testStep instanceof ClickStep) {
+            execute((ClickStep) testStep);
+        } else if (testStep instanceof SelectInputStep) {
+            execute((SelectInputStep) testStep);
         } else if (testStep instanceof SetPropertyTestStep) {
             execute((SetPropertyTestStep) testStep);
         } else if (testStep instanceof TransferPropertyTestStep) {
             execute((TransferPropertyTestStep) testStep);
-        } else if (testStep instanceof InputElementTestStep) {
-            execute((InputElementTestStep) testStep);
-        } else if (testStep instanceof LoadPageTestStep) {
-            execute((LoadPageTestStep) testStep);
-        } else if (testStep instanceof SwitchFrameTestStep) {
-            execute((SwitchFrameTestStep) testStep);
+        } else if (testStep instanceof TextInputStep) {
+            execute((TextInputStep) testStep);
+        } else if (testStep instanceof LoadPageStep) {
+            execute((LoadPageStep) testStep);
+        } else if (testStep instanceof SwitchFrameStep) {
+            execute((SwitchFrameStep) testStep);
         }
     }
 
-    public void execute(ClickElementTestStep testStep) {
+    public void execute(ClickStep testStep) {
         String selector = testStep.getProperty(testStep.getSelector());
         click(selector);
     }
@@ -55,13 +42,13 @@ public abstract class ExecutionEnvironment {
         clickAll(selector);
     }
 
-    public void execute(InputElementTestStep testStep) {
+    public void execute(TextInputStep testStep) {
         String selector = testStep.getProperty(testStep.getSelector());
         String value = testStep.getProperty(testStep.getValue());
         input(selector, value);
     }
 
-    public void execute(InputSelectElementTestStep testStep) {
+    public void execute(SelectInputStep testStep) {
         String selector = testStep.getProperty(testStep.getSelector());
         String type = "Label";
         String value = "";
@@ -74,12 +61,12 @@ public abstract class ExecutionEnvironment {
         select(selector, type, value);
     }
 
-    public void execute(LoadPageTestStep testStep) {
+    public void execute(LoadPageStep testStep) {
         String url = testStep.getProperty(testStep.getUrl());
         get(url);
     }
 
-    public void execute(SwitchFrameTestStep testStep) {
+    public void execute(SwitchFrameStep testStep) {
         String selector = testStep.getProperty(testStep.getSelector());
         switchTo(selector);
     }

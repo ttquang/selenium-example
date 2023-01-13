@@ -6,37 +6,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TestCase extends TestElement {
+public class TestCase extends Element {
     TestSuite testSuite;
-    List<TestStep> testSteps = new ArrayList<>();
+    List<Step> steps = new ArrayList<>();
 
     public TestCase(String name) {
         super(name);
         this.constructPropertyHandler(PropertyLevel.TEST_CASE, new HashMap<>());
     }
 
-    public void addTestStep(TestStep testStep) {
-        testStep.propertyHandler.nextHandler = this.propertyHandler;
-        testStep.testCase = this;
-        this.testSteps.add(testStep);
+    public void addStep(Step step) {
+        step.propertyHandler.nextHandler = this.propertyHandler;
+        step.testCase = this;
+        this.steps.add(step);
     }
 
     public void execute() {
-        for (TestStep testStep : testSteps) {
+        for (Step step : steps) {
             try {
-                testStep.run();
+                step.run();
             } catch (StepRuntimeException ex) {
                 ex.printStackTrace();
-                throw new StepRuntimeException(testStep);
+                throw new StepRuntimeException(step);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                throw new StepRuntimeException(testStep);
+                throw new StepRuntimeException(step);
             }
         }
     }
 
-    public void delegate(TestStep testStep) {
-        testSuite.delegate(testStep);
+    public void delegate(Step step) {
+        testSuite.delegate(step);
     }
 
 }

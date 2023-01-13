@@ -1,6 +1,6 @@
 package com.quangtt.webtest.execution;
 
-import com.quangtt.webtest.core.model.ExecutionEnvironment;
+import com.quangtt.webtest.core.model.TestRunner;
 import com.quangtt.webtest.core.model.PropertyLevel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultExecutionEnvironment extends ExecutionEnvironment {
+public class DefaultExecutionEnvironment extends TestRunner {
     WebDriver webDriver;
 
     public DefaultExecutionEnvironment(WebDriver webDriver) {

@@ -1,11 +1,13 @@
 package com.quangtt.webtest.template.service;
 
+import com.quangtt.webtest.core.model.Step;
 import com.quangtt.webtest.template.model.*;
 
 import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class TemplateUtils {
 
@@ -28,11 +30,10 @@ public class TemplateUtils {
             List<Template> immutableTemplates = List.copyOf(templates.values());
             for (Template template : immutableTemplates) {
                 System.out.println("Template : " + template.getName() + "=============================================");
-                for (TestStep step : template.getTestSteps()) {
+                for (Element step : template.getElements()) {
                     System.out.println(step.toString());
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException();
@@ -42,21 +43,22 @@ public class TemplateUtils {
     public void compileTemplate() {
         try {
             List<Template> immutableTemplates = List.copyOf(templates.values());
-            boolean inProcess = false;
+            boolean inProcess;
             do {
                 inProcess = false;
                 for (Template template : immutableTemplates) {
-                    List<TestStep> baseSteps = List.copyOf(template.getTestSteps());
-                    for (TestStep step : baseSteps) {
-                        if (step instanceof TemplateTestStep) {
+                    List<Element> baseSteps = List.copyOf(template.getElements());
+                    for (Element step : baseSteps) {
+                        if (step instanceof TemplateStep) {
                             inProcess = true;
-                            int stepIndex = template.getTestSteps().indexOf(step);
-                            TemplateTestStep templateStep = (TemplateTestStep) step;
+                            int stepIndex = template.getElements().indexOf(step);
+                            TemplateStep templateStep = (TemplateStep) step;
+                            String name = templateStep.getName();
                             String templateName = templateStep.getSelector();
                             List<String> parameters = Arrays.asList(templateStep.getValue().split(","));
-                            List<TestStep> steps = process(templateName, parameters);
-                            template.getTestSteps().addAll(stepIndex + 1, steps);
-                            template.getTestSteps().remove(step);
+                            List<Element> elements = processElements(name, templateName, parameters);
+                            template.getElements().addAll(stepIndex + 1, elements);
+                            template.getElements().remove(step);
                         }
                     }
                 }
@@ -67,21 +69,29 @@ public class TemplateUtils {
         }
     }
 
-    public List<TestStep> process(String templateName, List<String> parameters) {
-        List<TestStep> steps = new ArrayList<>();
+    public List<Element> processElements(String name, String templateName, List<String> parameters) {
+        List<Element> elements = new ArrayList<>();
         try {
             Template template = templates.get(templateName);
-            for (TestStep step : template.getTestSteps()) {
-                steps.add((TestStep) step.clone());
+            elements = template.getElements().stream().map(Element::clone).collect(Collectors.toList());
+            for (int i = 0; i < elements.size(); i++) {
+                Element element = elements.get(i);
+                element.setName(name + "." + (i + 1));
+                if (element instanceof TemplateXpathAware) {
+                    ((TemplateXpathAware) element).processSelector(parameters);
+                }
+                if (element instanceof TemplateInputAware) {
+                    ((TemplateInputAware) element).processValue(parameters);
+                }
             }
-            processParameter(steps, parameters);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return steps;
+        return elements;
     }
 
-    private String processParameter(String s, List<String> parameters) {
+    public static String processParameter(String s, List<String> parameters) {
         String result = s;
         Set<Integer> placeHolders = new HashSet<>();
         Matcher m = PARAMETER_PATTERN.matcher(result);
@@ -99,19 +109,13 @@ public class TemplateUtils {
         return result;
     }
 
-    private List<TestStep> processParameter(List<TestStep> steps, List<String> parameters) {
-        for (TestStep step : steps) {
-            if (step instanceof ElementAware) {
-                ElementAware elementAware = (ElementAware) step;
-                String selector = elementAware.getSelector();
-                elementAware.setSelector(processParameter(selector, parameters));
-            }
-
-            if (step instanceof InputAware) {
-                InputAware inputAware = (InputAware) step;
-                String value = inputAware.getValue();
-                inputAware.setValue(processParameter(value, parameters));
-            }
+    public List<Step> process(String group, String templateName, List<String> parameters) {
+        List<Step> steps = new ArrayList<>();
+        try {
+            Template template = templates.get(templateName);
+            steps = template.getElements().stream().map(element -> element.generateStep(group, parameters)).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return steps;
     }

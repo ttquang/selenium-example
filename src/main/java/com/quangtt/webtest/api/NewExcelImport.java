@@ -61,7 +61,7 @@ public class NewExcelImport {
 
             if ("Property".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = true;
-            } else if ("TestStep".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
+            } else if ("Step".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = false;
                 inProcessingTestStep = true;
             } else if ("END".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
@@ -72,74 +72,66 @@ public class NewExcelImport {
                         testCase.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(3)));
                 } else if (inProcessingTestStep) {
                     String type = VALUE_EXTRACTION.apply(row.getCell(1));
-                    TestStep testStep = null;
+                    Step testStep = null;
 
                     switch (type) {
                         case "Input":
-                            testStep = new InputElementTestStep(
+                            testStep = new TextInputStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "Click":
-                            testStep = new ClickElementTestStep(
+                            testStep = new ClickStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "ClickAll":
                             testStep = new ClickAllElementTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "InputSelect":
-                            testStep = new InputSelectElementTestStep(
+                            testStep = new SelectInputStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "TransferProperty":
                             testStep = new TransferPropertyTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "SetProperty":
                             testStep = new SetPropertyTestStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "SwitchFrame":
-                            testStep = new SwitchFrameTestStep(
+                            testStep = new SwitchFrameStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "LoadPage":
-                            testStep = new LoadPageTestStep(
+                            testStep = new LoadPageStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    Long.valueOf(VALUE_EXTRACTION.apply(row.getCell(4)))
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
 
                     }
 
                     if (Objects.nonNull(testStep)) {
-                        testCase.addTestStep(testStep);
+                        testCase.addStep(testStep);
                     }
 
                 }

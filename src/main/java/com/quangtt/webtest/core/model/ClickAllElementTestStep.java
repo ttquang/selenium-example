@@ -1,9 +1,9 @@
 package com.quangtt.webtest.core.model;
 
-public class ClickAllElementTestStep extends ClickElementTestStep {
+public class ClickAllElementTestStep extends ClickStep {
 
-    public ClickAllElementTestStep(String name, String selector, long delayPeriod) {
-        super(name, selector, delayPeriod);
+    public ClickAllElementTestStep(String name, String selector) {
+        super(name, selector);
     }
 
 }

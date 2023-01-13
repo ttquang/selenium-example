@@ -1,11 +1,11 @@
 package com.quangtt.webtest.core.model;
 
-public class SetPropertyTestStep extends TestStep implements PropertyAware{
+public class SetPropertyTestStep extends Step implements PropertyAware{
     String key;
     String value;
 
-    public SetPropertyTestStep(String name, String key, String value, long delayPeriod) {
-        super(name, delayPeriod);
+    public SetPropertyTestStep(String name, String key, String value) {
+        super(name);
         this.key = key;
         this.value = value;
     }

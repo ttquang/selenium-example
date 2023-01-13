@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TestSuite extends TestElement {
+public class TestSuite extends Element {
     List<TestCase> testCases = new ArrayList<>();
 
     Map<String, Integer> loopTimes = new HashMap<>();
 
-    ExecutionEnvironment environment;
+    TestRunner environment;
 
     public TestSuite(String name) {
         super(name);
@@ -40,14 +40,14 @@ public class TestSuite extends TestElement {
         this.testCases.add(testCase);
     }
 
-    public void runWith(ExecutionEnvironment environment) {
+    public void runWith(TestRunner environment) {
         plugIn(environment);
         execute();
         unPlugin();
 
     }
 
-    private void plugIn(ExecutionEnvironment environment) {
+    private void plugIn(TestRunner environment) {
         this.environment = environment;
         this.propertyHandler.nextHandler = environment.propertyHandler;
     }
@@ -57,7 +57,7 @@ public class TestSuite extends TestElement {
         this.propertyHandler.nextHandler = null;
     }
 
-    public void delegate(TestStep testStep) {
+    public void delegate(Step testStep) {
         this.environment.delegate(testStep);
     }
 

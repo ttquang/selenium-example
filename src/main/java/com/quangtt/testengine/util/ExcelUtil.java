@@ -108,7 +108,7 @@ public class ExcelUtil {
 
             if ("Property".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = true;
-            } else if ("TestStep".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
+            } else if ("Step".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = false;
                 inProcessingTestStep = true;
             } else if ("END".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {

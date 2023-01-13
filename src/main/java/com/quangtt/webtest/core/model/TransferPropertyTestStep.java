@@ -1,12 +1,12 @@
 package com.quangtt.webtest.core.model;
 
-public class TransferPropertyTestStep extends TestStep implements PropertyAware, ElementAware {
+public class TransferPropertyTestStep extends Step implements PropertyAware, XpathAware {
 
     String selector;
     String key;
 
-    public TransferPropertyTestStep(String name, String key, String selector, long delayPeriod) {
-        super(name, delayPeriod);
+    public TransferPropertyTestStep(String name, String key, String selector) {
+        super(name);
         this.selector = selector;
         this.key = key;
     }
@@ -14,11 +14,6 @@ public class TransferPropertyTestStep extends TestStep implements PropertyAware,
     @Override
     public String getSelector() {
         return selector;
-    }
-
-    @Override
-    public void setSelector(String selector) {
-        this.selector = selector;
     }
 
     @Override

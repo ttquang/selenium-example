@@ -4,25 +4,17 @@ import com.quangtt.webtest.template.service.TemplateUtils;
 
 import java.util.List;
 
-public class TransferPropertyTestStep extends Element implements PropertyAware, TemplateXpathAware {
-
+public class SwitchFrameStep extends Element implements TemplateXpathAware {
     String selector;
-    String key;
-
-    public TransferPropertyTestStep(String name, String key, String selector) {
-        super(name);
-        this.selector = selector;
-        this.key = key;
-    }
 
     @Override
     public String getSelector() {
         return selector;
     }
 
-    @Override
-    public String getKey() {
-        return key;
+    public SwitchFrameStep(String name, String selector) {
+        super(name);
+        this.selector = selector;
     }
 
     @Override

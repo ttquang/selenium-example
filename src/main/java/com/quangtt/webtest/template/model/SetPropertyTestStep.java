@@ -1,11 +1,11 @@
 package com.quangtt.webtest.template.model;
 
-public class SetPropertyTestStep extends TestStep implements PropertyAware {
+public class SetPropertyTestStep extends Element implements PropertyAware {
     String key;
     String value;
 
-    public SetPropertyTestStep(String name, String key, String value, long delayPeriod) {
-        super(name, delayPeriod);
+    public SetPropertyTestStep(String name, String key, String value) {
+        super(name);
         this.key = key;
         this.value = value;
     }
@@ -18,4 +18,10 @@ public class SetPropertyTestStep extends TestStep implements PropertyAware {
     public String getKey() {
         return key;
     }
+
+    @Override
+    public Element clone() {
+        return null;
+    }
+
 }

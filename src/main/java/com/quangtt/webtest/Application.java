@@ -1,18 +1,9 @@
 package com.quangtt.webtest;
 
-import com.quangtt.webtest.api.ExcelImport;
-import com.quangtt.webtest.api.WebDriverFactory;
-import com.quangtt.webtest.core.exception.StepRuntimeException;
-import com.quangtt.webtest.core.model.ExecutionEnvironment;
-import com.quangtt.webtest.core.model.TestSuite;
-import com.quangtt.webtest.execution.DefaultExecutionEnvironment;
+import com.quangtt.webtest.core.model.Step;
 import com.quangtt.webtest.template.service.TemplateUtils;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
@@ -34,7 +25,7 @@ public class Application {
 //            properties.put("branch","90236");
 //            properties.put("prefer_lang","English");
 //            properties.put("module","MPCHF");
-//            ExecutionEnvironment environment = new DefaultExecutionEnvironment(webDriver, properties);
+//            TestRunner environment = new DefaultExecutionEnvironment(webDriver, properties);
 //            testSuite.runWith(environment);
 //        } catch (StepRuntimeException ex) {
 //            ex.printStackTrace();
@@ -54,6 +45,14 @@ public class Application {
             utils.loadTemplate();
             utils.compileTemplate();
             utils.printTemplate();
+
+            List<Step> testSteps = utils.process(
+                    "group.1",
+                    "LoginAs",
+                    List.of("param1","param2","param3")
+            );
+
+            testSteps.forEach(step -> System.out.println(step.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }

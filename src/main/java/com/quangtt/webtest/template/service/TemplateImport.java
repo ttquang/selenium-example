@@ -50,6 +50,7 @@ public class TemplateImport {
 
         boolean inProcessingProperty = false;
         boolean inProcessingTestStep = false;
+        int elementIndex = 1;
 
         for (int i = 2; i < testCaseSheet.getLastRowNum(); i++) {
             Row row = testCaseSheet.getRow(i);
@@ -67,82 +68,67 @@ public class TemplateImport {
 //                        template.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(3)));
                 } else if (inProcessingTestStep) {
                     String type = VALUE_EXTRACTION.apply(row.getCell(1));
-                    TestStep testStep = null;
+                    Element element = null;
 
                     switch (type) {
                         case "Input":
-                            testStep = new InputElementTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+                            element = new TextInputStep(
+                                    String.valueOf(elementIndex),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    0
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
                         case "Click":
-                            testStep = new ClickElementTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    0
-                            );
-                            break;
-                        case "ClickAll":
-                            testStep = new ClickAllElementTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    0
+                            element = new ClickStep(
+                                    String.valueOf(elementIndex),
+                                    VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "InputSelect":
-                            testStep = new InputSelectElementTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+                            element = new SelectInputStep(
+                                    String.valueOf(elementIndex),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    0
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
-                        case "TransferProperty":
-                            testStep = new TransferPropertyTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    0
-                            );
-                            break;
-                        case "SetProperty":
-                            testStep = new SetPropertyTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    0
-                            );
-                            break;
-                        case "SwitchFrame":
-                            testStep = new SwitchFrameTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    0
-                            );
-                            break;
-                        case "LoadPage":
-                            testStep = new LoadPageTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    0
-                            );
-                            break;
+//                        case "TransferProperty":
+//                            element = new TransferPropertyTestStep(
+//                                    String.valueOf(elementIndex),
+//                                    VALUE_EXTRACTION.apply(row.getCell(3)),
+//                                    VALUE_EXTRACTION.apply(row.getCell(2))
+//                            );
+//                            break;
+//                        case "SetProperty":
+//                            element = new SetPropertyTestStep(
+//                                    String.valueOf(elementIndex),
+//                                    VALUE_EXTRACTION.apply(row.getCell(2)),
+//                                    VALUE_EXTRACTION.apply(row.getCell(3))
+//                            );
+//                            break;
+//                        case "SwitchFrame":
+//                            element = new SwitchFrameStep(
+//                                    String.valueOf(elementIndex),
+//                                    VALUE_EXTRACTION.apply(row.getCell(2))
+//                            );
+//                            break;
+//                        case "LoadPage":
+//                            element = new LoadPageTestStep(
+//                                    String.valueOf(elementIndex),
+//                                    VALUE_EXTRACTION.apply(row.getCell(3))
+//                            );
+//                            break;
                         case "Template":
-                            testStep = new TemplateTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+                            element = new TemplateStep(
+                                    String.valueOf(elementIndex),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    0
+                                    VALUE_EXTRACTION.apply(row.getCell(3))
                             );
-                            template.setNested(true);
                             break;
                     }
 
-                    if (Objects.nonNull(testStep)) {
-                        template.getTestSteps().add(testStep);
+                    if (Objects.nonNull(element)) {
+                        template.getElements().add(element);
+                        elementIndex++;
                     }
                 }
             }

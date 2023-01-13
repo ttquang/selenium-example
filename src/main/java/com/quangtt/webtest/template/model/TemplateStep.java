@@ -4,15 +4,14 @@ import com.quangtt.webtest.template.service.TemplateUtils;
 
 import java.util.List;
 
-public class TransferPropertyTestStep extends Element implements PropertyAware, TemplateXpathAware {
-
+public class TemplateStep extends Element implements TemplateXpathAware, TemplateInputAware {
     String selector;
-    String key;
+    String value;
 
-    public TransferPropertyTestStep(String name, String key, String selector) {
+    public TemplateStep(String name, String selector, String value) {
         super(name);
         this.selector = selector;
-        this.key = key;
+        this.value = value;
     }
 
     @Override
@@ -21,13 +20,23 @@ public class TransferPropertyTestStep extends Element implements PropertyAware, 
     }
 
     @Override
-    public String getKey() {
-        return key;
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return "TemplateStep - " + selector + " - " + value;
     }
 
     @Override
     public Element clone() {
         return null;
+    }
+
+    @Override
+    public void processValue(List<String> parameters) {
+        this.value = TemplateUtils.processParameter(value, parameters);
     }
 
     @Override

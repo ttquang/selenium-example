@@ -7,9 +7,8 @@ import java.util.List;
 public class Template {
     String name;
 
-    boolean isNested = false;
     List<String> parameters = new ArrayList<>();
-    List<TestStep> testSteps = new ArrayList<>();
+    List<Element> elements = new ArrayList<>();
 
     public Template(String name) {
         this.name = name;
@@ -23,15 +22,8 @@ public class Template {
         return parameters;
     }
 
-    public List<TestStep> getTestSteps() {
-        return testSteps;
+    public List<Element> getElements() {
+        return elements;
     }
 
-    public boolean isNested() {
-        return isNested;
-    }
-
-    public void setNested(boolean nested) {
-        isNested = nested;
-    }
 }
