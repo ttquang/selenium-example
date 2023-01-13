@@ -1,4 +1,4 @@
-package com.quangtt.webtest.core.model;
+package com.quangtt.webtest.template.model;
 
 public class InputElementTestStep extends TestStep implements ElementAware, InputAware {
     String selector;
@@ -26,5 +26,10 @@ public class InputElementTestStep extends TestStep implements ElementAware, Inpu
     @Override
     public void setSelector(String selector) {
         this.selector = selector;
+    }
+
+    @Override
+    public String toString() {
+        return "InputElementTestStep - " + selector + " - " + value;
     }
 }

@@ -22,7 +22,7 @@ public abstract class TestElement {
     public abstract void execute();
 
     public void run() {
-        if (evaluateExecuteCondition()) {
+        if (isEnable()) {
             execute();
         }
     }

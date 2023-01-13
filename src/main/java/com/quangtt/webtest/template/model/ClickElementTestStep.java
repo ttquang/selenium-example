@@ -1,4 +1,4 @@
-package com.quangtt.webtest.core.model;
+package com.quangtt.webtest.template.model;
 
 public class ClickElementTestStep extends TestStep implements ElementAware {
     String selector;
@@ -16,5 +16,10 @@ public class ClickElementTestStep extends TestStep implements ElementAware {
     @Override
     public void setSelector(String selector) {
         this.selector = selector;
+    }
+
+    @Override
+    public String toString() {
+        return "ClickElementTestStep - " + selector;
     }
 }

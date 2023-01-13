@@ -1,4 +1,4 @@
-package com.quangtt.webtest.core.model;
+package com.quangtt.webtest.template.model;
 
 public class TransferPropertyTestStep extends TestStep implements PropertyAware, ElementAware {
 

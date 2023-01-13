@@ -2,7 +2,7 @@ package com.quangtt.webtest.core.model;
 
 import java.util.HashMap;
 
-public abstract class TestStep extends TestElement {
+public abstract class TestStep extends TestElement implements Cloneable {
     TestCase testCase;
 
     long delayPeriod;
@@ -16,5 +16,11 @@ public abstract class TestStep extends TestElement {
     public void execute() {
         testCase.delegate(this);
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 
 }

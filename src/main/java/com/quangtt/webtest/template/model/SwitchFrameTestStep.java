@@ -1,4 +1,4 @@
-package com.quangtt.webtest.core.model;
+package com.quangtt.webtest.template.model;
 
 public class SwitchFrameTestStep extends TestStep implements ElementAware {
     String selector;
