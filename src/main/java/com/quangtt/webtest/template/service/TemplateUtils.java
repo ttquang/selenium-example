@@ -15,7 +15,7 @@ public class TemplateUtils {
     public void loadTemplate() {
         try {
             TemplateImport templateImport = new TemplateImport();
-            File file = new File("D:\\testTool\\testsuite\\Template.xlsx");
+            File file = new File("Template.xlsx");
             templates = templateImport.importFromExcel(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,20 +42,25 @@ public class TemplateUtils {
     public void compileTemplate() {
         try {
             List<Template> immutableTemplates = List.copyOf(templates.values());
-            for (Template template : immutableTemplates) {
-                List<TestStep> baseSteps = List.copyOf(template.getTestSteps());
-                for (TestStep step : baseSteps) {
-                    if (step instanceof TemplateTestStep) {
-                        int stepIndex = template.getTestSteps().indexOf(step);
-                        TemplateTestStep templateStep = (TemplateTestStep) step;
-                        String templateName = templateStep.getSelector();
-                        List<String> parameters = Arrays.asList(templateStep.getValue().split(","));
-                        List<TestStep> steps = process(templateName, parameters);
-                        template.getTestSteps().addAll(stepIndex + 1, steps);
-                        template.getTestSteps().remove(step);
+            boolean inProcess = false;
+            do {
+                inProcess = false;
+                for (Template template : immutableTemplates) {
+                    List<TestStep> baseSteps = List.copyOf(template.getTestSteps());
+                    for (TestStep step : baseSteps) {
+                        if (step instanceof TemplateTestStep) {
+                            inProcess = true;
+                            int stepIndex = template.getTestSteps().indexOf(step);
+                            TemplateTestStep templateStep = (TemplateTestStep) step;
+                            String templateName = templateStep.getSelector();
+                            List<String> parameters = Arrays.asList(templateStep.getValue().split(","));
+                            List<TestStep> steps = process(templateName, parameters);
+                            template.getTestSteps().addAll(stepIndex + 1, steps);
+                            template.getTestSteps().remove(step);
+                        }
                     }
                 }
-            }
+            } while (inProcess);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException();
@@ -63,10 +68,17 @@ public class TemplateUtils {
     }
 
     public List<TestStep> process(String templateName, List<String> parameters) {
-        Template template = templates.get(templateName);
-        List<TestStep> baseSteps = List.copyOf(template.getTestSteps());
-        processParameter(baseSteps, parameters);
-        return baseSteps;
+        List<TestStep> steps = new ArrayList<>();
+        try {
+            Template template = templates.get(templateName);
+            for (TestStep step : template.getTestSteps()) {
+                steps.add((TestStep) step.clone());
+            }
+            processParameter(steps, parameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return steps;
     }
 
     private String processParameter(String s, List<String> parameters) {
@@ -75,13 +87,13 @@ public class TemplateUtils {
         Matcher m = PARAMETER_PATTERN.matcher(result);
         while (m.find()) {
             placeHolders.add(Integer.valueOf(m.group(1)) - 1);
-            result = result.replace(m.group(), "[[" + (Integer.valueOf(m.group(1)) - 1) + "]]");
+            result = result.replace(m.group(), "PLACEHOLDER" + (Integer.valueOf(m.group(1)) - 1));
             System.out.println(result);
             m = PARAMETER_PATTERN.matcher(result);
         }
 
-        for (Integer index: placeHolders) {
-            result = result.replaceAll("\\[\\[" + index + "]]", parameters.get(index));
+        for (Integer index : placeHolders) {
+            result = result.replace("PLACEHOLDER" + index, parameters.get(index));
         }
 
         return result;

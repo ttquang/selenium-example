@@ -1,6 +1,6 @@
 package com.quangtt.webtest.template.model;
 
-public abstract class TestStep extends TestElement {
+public abstract class TestStep extends TestElement implements Cloneable{
 
     long delayPeriod;
 
@@ -9,4 +9,8 @@ public abstract class TestStep extends TestElement {
         this.delayPeriod = delayPeriod;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
