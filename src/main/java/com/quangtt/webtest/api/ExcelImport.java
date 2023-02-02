@@ -62,7 +62,7 @@ public class ExcelImport {
 
             if ("Property".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = true;
-            } else if ("Step".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
+            } else if ("TestStep".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                 inProcessingProperty = false;
                 inProcessingTestStep = true;
             } else if ("END".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
@@ -128,7 +128,7 @@ public class ExcelImport {
                                     VALUE_EXTRACTION.apply(row.getCell(3))
                             );
                             break;
-                        case "Template":
+                        default:
                             List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
                             List<Step> testSteps = utils.process(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),

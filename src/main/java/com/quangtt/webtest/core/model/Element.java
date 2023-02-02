@@ -15,7 +15,9 @@ public abstract class Element {
     public abstract void execute();
 
     public void run() {
+        System.out.println("TestStep[" + name + "]:START");
         execute();
+        System.out.println("TestStep[" + name + "]:PASSED");
     }
 
 

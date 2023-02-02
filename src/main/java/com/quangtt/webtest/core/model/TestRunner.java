@@ -81,7 +81,7 @@ public abstract class TestRunner {
         String selector = testStep.getProperty(testStep.getSelector());
         String key = testStep.getProperty(testStep.getKey());
         String value = getAttribute(selector,"value");
-        testStep.putProperty(key, value);
+        testStep.putProperty("{" + key + "}", value);
     }
 
     protected abstract void get(String url);

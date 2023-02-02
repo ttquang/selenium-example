@@ -93,7 +93,7 @@ public class WebDriverProxy implements WebDriver{
 
     @Override
     public TargetLocator switchTo() {
-        return this.switchTo();
+        return webDriver.switchTo();
     }
 
     @Override

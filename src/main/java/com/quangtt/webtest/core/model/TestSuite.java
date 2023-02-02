@@ -19,7 +19,9 @@ public class TestSuite extends Element {
 
     @Override
     public void execute() {
+        System.out.println("TestSuite[" + name + "]:START");
         for (TestCase testCase : testCases) {
+            System.out.println("TestCase[" + testCase.name + "]:START");
             int loopTime = loopTimes.get(testCase.name);
             for (int i = 0; i < loopTime; i++) {
                 testCase.run();
