@@ -16,8 +16,8 @@ public class StepFactory {
         return new SelectInputStep(name, elementAware.getSelector(), inputAware.getValue());
     }
 
-    public static SwitchFrameStep createSwitchFrameStep(String name, XpathAware elementAware) {
-        return new SwitchFrameStep(name, elementAware.getSelector());
+    public static SwitchToFrameByXpathStep createSwitchFrameStep(String name, XpathAware elementAware) {
+        return new SwitchToFrameByXpathStep(name, elementAware.getSelector());
     }
 
 }

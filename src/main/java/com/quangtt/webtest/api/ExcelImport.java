@@ -103,27 +103,20 @@ public class ExcelImport {
                             );
                             break;
                         case "TransferProperty":
-                            testStep = new TransferPropertyTestStep(
+                            testStep = new PropertyTransferDOMValueStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(3)),
                                     VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
-                        case "SetProperty":
-                            testStep = new SetPropertyTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3))
-                            );
-                            break;
                         case "SwitchFrame":
-                            testStep = new SwitchFrameStep(
+                            testStep = new SwitchToFrameByXpathStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2))
                             );
                             break;
                         case "LoadPage":
-                            testStep = new LoadPageStep(
+                            testStep = new NavigationToUrlStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(3))
                             );

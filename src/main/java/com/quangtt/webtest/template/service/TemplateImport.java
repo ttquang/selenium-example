@@ -92,7 +92,7 @@ public class TemplateImport {
                             );
                             break;
 //                        case "TransferProperty":
-//                            element = new TransferPropertyTestStep(
+//                            element = new PropertyTransferStep(
 //                                    String.valueOf(elementIndex),
 //                                    VALUE_EXTRACTION.apply(row.getCell(3)),
 //                                    VALUE_EXTRACTION.apply(row.getCell(2))

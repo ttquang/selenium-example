@@ -1,8 +1,6 @@
 package com.quangtt.webtest.core.model;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class TestRunner {
 
@@ -19,82 +17,29 @@ public abstract class TestRunner {
             execute((ClickStep) testStep);
         } else if (testStep instanceof SelectInputStep) {
             execute((SelectInputStep) testStep);
-        } else if (testStep instanceof SetPropertyTestStep) {
-            execute((SetPropertyTestStep) testStep);
-        } else if (testStep instanceof TransferPropertyTestStep) {
-            execute((TransferPropertyTestStep) testStep);
+        } else if (testStep instanceof PropertyTransferDOMValueStep) {
+            execute((PropertyTransferDOMValueStep) testStep);
         } else if (testStep instanceof TextInputStep) {
             execute((TextInputStep) testStep);
-        } else if (testStep instanceof LoadPageStep) {
-            execute((LoadPageStep) testStep);
-        } else if (testStep instanceof SwitchFrameStep) {
-            execute((SwitchFrameStep) testStep);
+        } else if (testStep instanceof NavigationToUrlStep) {
+            execute((NavigationToUrlStep) testStep);
+        } else if (testStep instanceof SwitchToFrameByXpathStep) {
+            execute((SwitchToFrameByXpathStep) testStep);
         }
     }
 
-    public void execute(ClickStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        click(selector);
-    }
+    public abstract void execute(ClickStep testStep);
 
-    public void execute(ClickAllElementTestStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        clickAll(selector);
-    }
+    public abstract void execute(ClickAllElementTestStep testStep);
 
-    public void execute(TextInputStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        String value = testStep.getProperty(testStep.getValue());
-        input(selector, value);
-    }
+    public abstract void execute(TextInputStep testStep);
 
-    public void execute(SelectInputStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        String type = "Label";
-        String value = "";
-        Pattern pattern = Pattern.compile("(Index|Label|Value)#(.*)");
-        Matcher m = pattern.matcher(testStep.getValue());
-        if (m.find()) {
-            type = m.group(1);
-            value = testStep.getProperty(m.group(2));
-        }
-        select(selector, type, value);
-    }
+    public abstract void execute(SelectInputStep testStep);
 
-    public void execute(LoadPageStep testStep) {
-        String url = testStep.getProperty(testStep.getUrl());
-        get(url);
-    }
+    public abstract void execute(NavigationToUrlStep testStep);
 
-    public void execute(SwitchFrameStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        switchTo(selector);
-    }
+    public abstract void execute(SwitchToFrameByXpathStep testStep);
 
-    public void execute(SetPropertyTestStep testStep) {
-        String key = testStep.getProperty(testStep.getKey());
-        String value = testStep.getProperty(testStep.getValue());
-        testStep.putProperty(key, value);
-    }
+    public abstract void execute(PropertyTransferDOMValueStep testStep);
 
-    public void execute(TransferPropertyTestStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        String key = testStep.getProperty(testStep.getKey());
-        String value = getAttribute(selector,"value");
-        testStep.putProperty("{" + key + "}", value);
-    }
-
-    protected abstract void get(String url);
-
-    protected abstract void switchTo(String selector);
-
-    protected abstract void select(String selector, String type, String value);
-
-    protected abstract void click(String selector);
-
-    protected abstract void clickAll(String selector);
-
-    protected abstract void input(String selector, String value);
-
-    protected abstract String getAttribute(String selector, String attribute);
 }
