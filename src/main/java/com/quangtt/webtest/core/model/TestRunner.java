@@ -15,8 +15,8 @@ public abstract class TestRunner {
             execute((ClickAllElementTestStep) testStep);
         } else if (testStep instanceof ClickStep) {
             execute((ClickStep) testStep);
-        } else if (testStep instanceof SelectInputStep) {
-            execute((SelectInputStep) testStep);
+        } else if (testStep instanceof SelectStep) {
+            execute((SelectStep) testStep);
         } else if (testStep instanceof PropertyTransferDOMValueStep) {
             execute((PropertyTransferDOMValueStep) testStep);
         } else if (testStep instanceof TextInputStep) {
@@ -34,7 +34,7 @@ public abstract class TestRunner {
 
     public abstract void execute(TextInputStep testStep);
 
-    public abstract void execute(SelectInputStep testStep);
+    public abstract void execute(SelectStep testStep);
 
     public abstract void execute(NavigationToUrlStep testStep);
 

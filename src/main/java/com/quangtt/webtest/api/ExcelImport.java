@@ -96,7 +96,7 @@ public class ExcelImport {
                             );
                             break;
                         case "InputSelect":
-                            testStep = new SelectInputStep(
+                            testStep = new SelectStep(
                                     VALUE_EXTRACTION.apply(row.getCell(0)),
                                     VALUE_EXTRACTION.apply(row.getCell(2)),
                                     VALUE_EXTRACTION.apply(row.getCell(3))

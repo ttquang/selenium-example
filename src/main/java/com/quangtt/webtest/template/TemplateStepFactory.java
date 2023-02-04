@@ -12,8 +12,8 @@ public class TemplateStepFactory {
         return new TextInputStep(name, elementAware.getSelector(), inputAware.getValue());
     }
 
-    public static SelectInputStep createSelectInputStep(String name, XpathAware elementAware, InputAware inputAware) {
-        return new SelectInputStep(name, elementAware.getSelector(), inputAware.getValue());
+    public static SelectStep createSelectInputStep(String name, XpathAware elementAware, InputAware inputAware) {
+        return new SelectStep(name, elementAware.getSelector(), inputAware.getValue());
     }
 
     public static SwitchToFrameByXpathStep createSwitchFrameStep(String name, XpathAware elementAware) {

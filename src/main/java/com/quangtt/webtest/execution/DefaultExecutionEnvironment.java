@@ -6,10 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DefaultExecutionEnvironment extends TestRunner {
     WebDriver webDriver;
@@ -45,7 +42,8 @@ public class DefaultExecutionEnvironment extends TestRunner {
     }
 
     @Override
-    public void execute(ClickAllElementTestStep step) {}
+    public void execute(ClickAllElementTestStep step) {
+    }
 
     @Override
     public void execute(TextInputStep step) {
@@ -55,16 +53,10 @@ public class DefaultExecutionEnvironment extends TestRunner {
     }
 
     @Override
-    public void execute(SelectInputStep step) {
+    public void execute(SelectStep step) {
         String selector = step.getProperty(step.getSelector());
-        String type = "Label";
-        String value = "";
-        Pattern pattern = Pattern.compile("(Index|Label|Value)#(.*)");
-        Matcher m = pattern.matcher(step.getValue());
-        if (m.find()) {
-            type = m.group(1);
-            value = step.getProperty(m.group(2));
-        }
+        String type = step.getSelectBy();
+        String value = step.getProperty(step.getValue());
         select(selector, type, value);
     }
 
