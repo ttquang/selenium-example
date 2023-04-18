@@ -28,7 +28,7 @@ public class SelectStep extends Step implements XpathAware, InputAware {
 
     @Override
     public String getValue() {
-        return null;
+        return value;
     }
 
     public String getSelectBy() {
