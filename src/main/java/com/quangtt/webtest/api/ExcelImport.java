@@ -122,13 +122,13 @@ public class ExcelImport {
                             );
                             break;
                         default:
-                            List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
-                            List<Step> testSteps = utils.process(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(1)),
-                                    parameters
-                            );
-                            testSteps.forEach(testCase::addStep);
+//                            List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
+//                            List<Step> testSteps = utils.process(
+//                                    VALUE_EXTRACTION.apply(row.getCell(0)),
+//                                    VALUE_EXTRACTION.apply(row.getCell(1)),
+//                                    parameters
+//                            );
+//                            testSteps.forEach(testCase::addStep);
                             break;
                     }
 
@@ -152,8 +152,9 @@ public class ExcelImport {
         for (int i = 1; i < testSuiteSheet.getLastRowNum(); i++) {
             Row row = testSuiteSheet.getRow(i);
             if (inProcessingProperty) {
-                if (!VALUE_EXTRACTION.apply(row.getCell(1)).isBlank())
-                    testSuite.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(2)));
+                if (row != null)
+                    if (!VALUE_EXTRACTION.apply(row.getCell(1)).isBlank())
+                        testSuite.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(2)));
             } else {
                 if ("Property".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
                     inProcessingProperty = true;

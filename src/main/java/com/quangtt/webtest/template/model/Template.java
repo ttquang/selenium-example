@@ -7,7 +7,6 @@ import java.util.List;
 public class Template {
     String name;
 
-    List<String> parameters = new ArrayList<>();
     List<Element> elements = new ArrayList<>();
 
     public Template(String name) {
@@ -16,10 +15,6 @@ public class Template {
 
     public String getName() {
         return name;
-    }
-
-    public List<String> getParameters() {
-        return parameters;
     }
 
     public List<Element> getElements() {

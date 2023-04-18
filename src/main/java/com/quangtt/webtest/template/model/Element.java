@@ -1,15 +1,30 @@
 package com.quangtt.webtest.template.model;
 
 import com.quangtt.webtest.core.model.Step;
+import com.quangtt.webtest.template.service.TemplateUtils;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class Element {
+public class Element {
 
     String name;
+    String type;
+    Map<String, String> parameters = new HashMap<>();
 
     public Element(String name) {
         this.name = name;
+    }
+
+    public Element(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public Element(String name, String type, Map<String, String> parameters) {
+        this.name = name;
+        this.type = type;
+        this.parameters = parameters;
     }
 
     public String getName() {
@@ -20,15 +35,37 @@ public abstract class Element {
         this.name = name;
     }
 
-    public abstract Element clone();
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
 
-    public Step generateStep(String group, List<String> parameters) {
+    public boolean isTemplate() {
+        return "Template".equals(type);
+    }
+
+    public final Element clone() {
+        Map<String, String> cloneParameters = new HashMap<>();
+        for (String key : this.parameters.keySet()) {
+            cloneParameters.put(key, this.parameters.get(key));
+        }
+        return new Element(name, type, cloneParameters);
+    }
+
+    public void setProperty(String property, String value) {
+        parameters.put(property, value);
+    }
+
+    public Step generateStep(String group, Map<String, String> parameters) {
         throw new RuntimeException();
+    }
+
+    public void processParameter(Map<String, String> parameters) {
+        this.parameters = TemplateUtils.processParameter(this.parameters, parameters);
     }
 
     @Override
     public String toString() {
-        return name;
+        return name + "-" + type + "-" + parameters;
     }
 
 }

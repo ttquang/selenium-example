@@ -49,14 +49,13 @@ public class TemplateUtils {
                 for (Template template : immutableTemplates) {
                     List<Element> baseSteps = List.copyOf(template.getElements());
                     for (Element step : baseSteps) {
-                        if (step instanceof TemplateStep) {
+                        if (step.isTemplate()) {
                             inProcess = true;
                             int stepIndex = template.getElements().indexOf(step);
-                            TemplateStep templateStep = (TemplateStep) step;
+                            Element templateStep = step;
                             String name = templateStep.getName();
-                            String templateName = templateStep.getSelector();
-                            List<String> parameters = Arrays.asList(templateStep.getValue().split(","));
-                            List<Element> elements = processElements(name, templateName, parameters);
+                            String templateName = templateStep.getParameters().get("TEMPLATE_NAME");
+                            List<Element> elements = processElements(name, templateName, templateStep.getParameters());
                             template.getElements().addAll(stepIndex + 1, elements);
                             template.getElements().remove(step);
                         }
@@ -69,7 +68,7 @@ public class TemplateUtils {
         }
     }
 
-    public List<Element> processElements(String name, String templateName, List<String> parameters) {
+    public List<Element> processElements(String name, String templateName, Map<String,String> parameters) {
         List<Element> elements = new ArrayList<>();
         try {
             Template template = templates.get(templateName);
@@ -77,12 +76,13 @@ public class TemplateUtils {
             for (int i = 0; i < elements.size(); i++) {
                 Element element = elements.get(i);
                 element.setName(name + "." + (i + 1));
-                if (element instanceof TemplateXpathAware) {
-                    ((TemplateXpathAware) element).processSelector(parameters);
-                }
-                if (element instanceof TemplateInputAware) {
-                    ((TemplateInputAware) element).processValue(parameters);
-                }
+                element.processParameter(parameters);
+//                if (element instanceof TemplateXpathAware) {
+//                    ((TemplateXpathAware) element).processSelector(parameters);
+//                }
+//                if (element instanceof TemplateInputAware) {
+//                    ((TemplateInputAware) element).processValue(parameters);
+//                }
             }
 
         } catch (Exception e) {
@@ -91,25 +91,46 @@ public class TemplateUtils {
         return elements;
     }
 
-    public static String processParameter(String s, List<String> parameters) {
+    public static String processParameter(String s, Map<String,String> parameters) {
         String result = s;
-        Set<Integer> placeHolders = new HashSet<>();
+        Set<String> placeHolders = new HashSet<>();
         Matcher m = PARAMETER_PATTERN.matcher(result);
         while (m.find()) {
-            placeHolders.add(Integer.valueOf(m.group(1)) - 1);
-            result = result.replace(m.group(), "PLACEHOLDER" + (Integer.valueOf(m.group(1)) - 1));
+            placeHolders.add(m.group(1));
+            result = result.replace(m.group(), "PLACEHOLDER" + m.group(1));
             System.out.println(result);
             m = PARAMETER_PATTERN.matcher(result);
         }
 
-        for (Integer index : placeHolders) {
+        for (String index : placeHolders) {
             result = result.replace("PLACEHOLDER" + index, parameters.get(index));
         }
 
         return result;
     }
 
-    public List<Step> process(String group, String templateName, List<String> parameters) {
+    public static Map<String,String> processParameter(Map<String,String> parameters, Map<String,String> inputParameters) {
+        Set<String> placeHolders = new HashSet<>();
+        for (String key: parameters.keySet()) {
+            String rawValue = parameters.get(key);
+            Matcher m = PARAMETER_PATTERN.matcher(rawValue);
+            while (m.find()) {
+                placeHolders.add(m.group(1));
+                rawValue = rawValue.replace(m.group(), "PLACEHOLDER" + m.group(1));
+                System.out.println(rawValue);
+                m = PARAMETER_PATTERN.matcher(rawValue);
+            }
+
+            for (String index : placeHolders) {
+                rawValue = rawValue.replace("PLACEHOLDER" + index, inputParameters.get(index));
+            }
+            parameters.put(key,rawValue);
+        }
+
+        return parameters;
+    }
+
+    public List<Step> process(String group, String templateName, Map<String,String> parameters) {
         List<Step> steps = new ArrayList<>();
         try {
             Template template = templates.get(templateName);
