@@ -31,6 +31,7 @@ public class PropertyHandler {
     }
 
     String get(String key) {
+        System.out.println(key);
         Matcher m = PROPERTY_PATTERN.matcher(key);
         String result = key;
 

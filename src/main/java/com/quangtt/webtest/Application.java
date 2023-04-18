@@ -8,6 +8,7 @@ import com.quangtt.webtest.core.model.TestSuite;
 import com.quangtt.webtest.execution.DefaultExecutionEnvironment;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.edge.EdgeDriverService;
 
 import java.io.File;
 import java.util.HashMap;
@@ -15,7 +16,8 @@ import java.util.Map;
 
 public class Application {
     public static void main(String[] args) {
-        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, "D:\\webdriver\\109.0.5414.74\\chromedriver.exe");
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, "D:/webdriver/chromedriver.exe");
+        System.setProperty(EdgeDriverService.EDGE_DRIVER_EXE_PROPERTY, "D:/webdriver/msedgedriver.exe");
         WebDriver webDriver = null;
         try {
             ExcelImport excelImport = new ExcelImport();
@@ -41,7 +43,7 @@ public class Application {
             ex.printStackTrace();
         } finally {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
