@@ -10,6 +10,6 @@ public class SwitchToFrameByXpathStep extends SwitchToFrame implements XpathAwar
 
     @Override
     public String getSelector() {
-        return null;
+        return selector;
     }
 }
