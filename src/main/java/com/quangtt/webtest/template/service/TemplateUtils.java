@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class TemplateUtils {
 
-    static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{([\\d]+)}");
+    static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{([\\d\\w]+)}");
     private Map<String, Template> templates;
 
     public void loadTemplate() {
