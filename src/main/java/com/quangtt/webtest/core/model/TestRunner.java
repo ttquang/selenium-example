@@ -15,18 +15,5 @@ public abstract class TestRunner {
     }
 
     public abstract void execute(Step step);
-    public abstract void execute(ClickStep testStep);
-
-    public abstract void execute(ClickAllElementTestStep testStep);
-
-    public abstract void execute(TextInputStep testStep);
-
-    public abstract void execute(SelectStep testStep);
-
-    public abstract void execute(NavigationToUrlStep testStep);
-
-    public abstract void execute(SwitchToFrameByXpathStep testStep);
-
-    public abstract void execute(PropertyTransferDOMValueStep testStep);
 
 }

@@ -74,48 +74,5 @@ public class DefaultExecutionEnvironment extends TestRunner {
             step.putProperty("{" + step.getParameters().get("target") + "}", value);
         }
     }
-
-    @Override
-    public void execute(ClickStep testStep) {
-        String selector = testStep.getProperty(testStep.getSelector());
-        findElement(selector).click();
-    }
-
-    @Override
-    public void execute(ClickAllElementTestStep step) {
-    }
-
-    @Override
-    public void execute(TextInputStep step) {
-        String selector = step.getProperty(step.getSelector());
-        String value = step.getProperty(step.getValue());
-        findElement(selector).sendKeys(value);
-    }
-
-    @Override
-    public void execute(SelectStep step) {
-        String selector = step.getProperty(step.getSelector());
-        String type = step.getSelectBy();
-        String value = step.getProperty(step.getValue());
-        select(selector, type, value);
-    }
-
-    @Override
-    public void execute(NavigationToUrlStep step) {
-        String url = step.getProperty(step.getUrl());
-        this.webDriver.navigate().to(url);
-    }
-
-    @Override
-    public void execute(SwitchToFrameByXpathStep step) {
-        String selector = step.getProperty(step.getSelector());
-        this.webDriver.switchTo().frame(findElement(selector));
-    }
-
-    @Override
-    public void execute(PropertyTransferDOMValueStep step) {
-        String selector = step.getProperty(step.getSelector());
-        String value = findElement(selector).getAttribute(step.getAttribute());
-        step.putProperty("{" + step.getTarget() + "}", value);
-    }
+    
 }
