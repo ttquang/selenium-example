@@ -65,22 +65,20 @@ public class TemplateImport {
                 element.setProperty(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
             } else {
                 if (Objects.nonNull(element)) {
-                    if (Objects.nonNull(element)) {
-                        template.getElements().add(element);
-                        elementIndex++;
-                    }
+                    template.getElements().add(element);
+                    elementIndex++;
                 }
 
                 switch (type) {
-                    case "Input":
+                    case "WebElement":
                         element = new Element(String.valueOf(elementIndex), type);
                         element.setProperty(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
                         break;
-                    case "Click":
+                    case "Navigation":
                         element = new Element(String.valueOf(elementIndex), type);
                         element.setProperty(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
                         break;
-                    case "InputSelect":
+                    case "Property":
                         element = new Element(String.valueOf(elementIndex), type);
                         element.setProperty(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
                         break;

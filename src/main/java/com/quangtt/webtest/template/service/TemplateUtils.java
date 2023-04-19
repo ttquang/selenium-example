@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class TemplateUtils {
 
-    static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{([\\d\\w]+)}");
+    public static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\{([\\d\\w]+)}");
     private Map<String, Template> templates;
 
     public void loadTemplate() {
@@ -134,7 +134,16 @@ public class TemplateUtils {
         List<Step> steps = new ArrayList<>();
         try {
             Template template = templates.get(templateName);
-            steps = template.getElements().stream().map(element -> element.generateStep(group, parameters)).collect(Collectors.toList());
+            for (Element element : template.getElements()) {
+                try {
+                    Step step = element.generateStep(group, parameters);
+                    steps.add(step);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+//            steps = template.getElements().stream().map(element -> element.generateStep(group, parameters)).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
         }

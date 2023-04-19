@@ -24,20 +24,20 @@ public class Application {
             File file = new File("TestSuite3.1.xlsx");
             TestSuite testSuite = excelImport.processTestSuit(file);
 
-//            webDriver = WebDriverFactory.get();
-//            Map<String, String> properties = new HashMap<>();
-//            properties.put("url","http://192.168.1.24/rlos/Login.do");
-//            properties.put("sec_admin_acc","RLOS1");
-//            properties.put("sec_admin_pass","1");
-//            properties.put("sec_admin_maker","SECURITY ADMIN MAKER");
-//            properties.put("sec_admin_checker","SECURITY ADMIN CHECKER");
-//            properties.put("username","AUTO.TEST.BO");
-//            properties.put("role","100");
-//            properties.put("branch","90236");
-//            properties.put("prefer_lang","English");
-//            properties.put("module","MPCHF");
-//            TestRunner environment = new DefaultExecutionEnvironment(webDriver, properties);
-//            testSuite.runWith(environment);
+            webDriver = WebDriverFactory.get();
+            Map<String, String> properties = new HashMap<>();
+            properties.put("url","http://localhost/rlos/Login.do");
+            properties.put("sec_admin_acc","RLOS1");
+            properties.put("sec_admin_pass","1");
+            properties.put("sec_admin_maker","SECURITY ADMIN MAKER");
+            properties.put("sec_admin_checker","SECURITY ADMIN CHECKER");
+            properties.put("username","AUTO.TEST.BO");
+            properties.put("role","100");
+            properties.put("branch","90236");
+            properties.put("prefer_lang","English");
+            properties.put("module","MPCHF");
+            TestRunner environment = new DefaultExecutionEnvironment(webDriver, properties);
+            testSuite.runWith(environment);
         } catch (StepRuntimeException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {
@@ -48,7 +48,7 @@ public class Application {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//            webDriver.quit();
+            webDriver.quit();
         }
 
 //        try {

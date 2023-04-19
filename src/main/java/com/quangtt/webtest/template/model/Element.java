@@ -4,7 +4,12 @@ import com.quangtt.webtest.core.model.Step;
 import com.quangtt.webtest.template.service.TemplateUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+
+import static com.quangtt.webtest.template.service.TemplateUtils.PARAMETER_PATTERN;
 
 public class Element {
 
@@ -55,8 +60,29 @@ public class Element {
         parameters.put(property, value);
     }
 
-    public Step generateStep(String group, Map<String, String> parameters) {
-        throw new RuntimeException();
+    public Step generateStep(String group, Map<String, String> inputParameters) {
+        Map<String, String> cloneParameters = new HashMap<>();
+        Set<String> placeHolders = new HashSet<>();
+        for (String key: parameters.keySet()) {
+            String rawValue = parameters.get(key);
+            Matcher m = PARAMETER_PATTERN.matcher(rawValue);
+            while (m.find()) {
+                placeHolders.add(m.group(1));
+                rawValue = rawValue.replace(m.group(), "PLACEHOLDER" + m.group(1));
+                System.out.println(rawValue);
+                m = PARAMETER_PATTERN.matcher(rawValue);
+            }
+
+            for (String index : placeHolders) {
+                if (inputParameters.get(index) == null) {
+                    System.out.println("sss");
+                } else {
+                    rawValue = rawValue.replace("PLACEHOLDER" + index, inputParameters.get(index));
+                }
+            }
+            cloneParameters.put(key,rawValue);
+        }
+        return new Step(group + "." + name, type, cloneParameters);
     }
 
     public void processParameter(Map<String, String> parameters) {

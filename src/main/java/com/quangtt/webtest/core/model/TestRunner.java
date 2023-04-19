@@ -10,24 +10,11 @@ public abstract class TestRunner {
         this.propertyHandler = new PropertyHandler(level, properties);
     }
 
-    public void delegate(Step testStep) {
-        if (testStep instanceof ClickAllElementTestStep) {
-            execute((ClickAllElementTestStep) testStep);
-        } else if (testStep instanceof ClickStep) {
-            execute((ClickStep) testStep);
-        } else if (testStep instanceof SelectStep) {
-            execute((SelectStep) testStep);
-        } else if (testStep instanceof PropertyTransferDOMValueStep) {
-            execute((PropertyTransferDOMValueStep) testStep);
-        } else if (testStep instanceof TextInputStep) {
-            execute((TextInputStep) testStep);
-        } else if (testStep instanceof NavigationToUrlStep) {
-            execute((NavigationToUrlStep) testStep);
-        } else if (testStep instanceof SwitchToFrameByXpathStep) {
-            execute((SwitchToFrameByXpathStep) testStep);
-        }
+    public void delegate(Step step) {
+        execute(step);
     }
 
+    public abstract void execute(Step step);
     public abstract void execute(ClickStep testStep);
 
     public abstract void execute(ClickAllElementTestStep testStep);

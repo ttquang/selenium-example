@@ -1,6 +1,8 @@
 package com.quangtt.webtest.api;
 
-import com.quangtt.webtest.core.model.*;
+import com.quangtt.webtest.core.model.Step;
+import com.quangtt.webtest.core.model.TestCase;
+import com.quangtt.webtest.core.model.TestSuite;
 import com.quangtt.webtest.template.service.TemplateUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -57,6 +59,12 @@ public class ExcelImport {
         boolean inProcessingProperty = false;
         boolean inProcessingTestStep = false;
 
+        Step step = null;
+        String group = null;
+        String templateName = null;
+        Map<String, String> parameters = new HashMap<>();
+        int elementIndex = 1;
+
         for (int i = 2; i < testCaseSheet.getLastRowNum(); i++) {
             Row row = testCaseSheet.getRow(i);
 
@@ -66,6 +74,12 @@ public class ExcelImport {
                 inProcessingProperty = false;
                 inProcessingTestStep = true;
             } else if ("END".equals(VALUE_EXTRACTION.apply(row.getCell(0)))) {
+                List<Step> testSteps = utils.process(
+                        group,
+                        templateName,
+                        parameters
+                );
+                testSteps.forEach(testCase::addStep);
                 break;
             } else {
                 if (inProcessingProperty) {
@@ -73,68 +87,39 @@ public class ExcelImport {
                         testCase.putProperty(VALUE_EXTRACTION.apply(row.getCell(1)), VALUE_EXTRACTION.apply(row.getCell(3)));
                 } else if (inProcessingTestStep) {
                     String type = VALUE_EXTRACTION.apply(row.getCell(1));
-                    Step testStep = null;
+                    if (!"Action".equals(type)) {
 
-                    switch (type) {
-                        case "Input":
-                            testStep = new TextInputStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3))
-                            );
-                            break;
-                        case "Click":
-                            testStep = new ClickStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2))
-                            );
-                            break;
-                        case "ClickAll":
-                            testStep = new ClickAllElementTestStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2))
-                            );
-                            break;
-                        case "InputSelect":
-                            testStep = new SelectStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3))
-                            );
-                            break;
-                        case "TransferProperty":
-                            testStep = new PropertyTransferDOMValueStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2))
-                            );
-                            break;
-                        case "SwitchFrame":
-                            testStep = new SwitchToFrameByXpathStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(2))
-                            );
-                            break;
-                        case "LoadPage":
-                            testStep = new NavigationToUrlStep(
-                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-                                    VALUE_EXTRACTION.apply(row.getCell(3))
-                            );
-                            break;
-                        default:
-//                            List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
-//                            List<Step> testSteps = utils.process(
-//                                    VALUE_EXTRACTION.apply(row.getCell(0)),
-//                                    VALUE_EXTRACTION.apply(row.getCell(1)),
-//                                    parameters
-//                            );
-//                            testSteps.forEach(testCase::addStep);
-                            break;
+                        if (type.isBlank()) {
+                            parameters.put(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
+                        } else {
+                            if (Objects.nonNull(templateName)) {
+                                List<Step> testSteps = utils.process(
+                                        group,
+                                        templateName,
+                                        parameters
+                                );
+                                testSteps.forEach(testCase::addStep);
+                                parameters = new HashMap<>();
+                                elementIndex++;
+                            }
+
+                            group = String.valueOf(elementIndex);
+                            templateName = type;
+                            parameters.put(VALUE_EXTRACTION.apply(row.getCell(2)), VALUE_EXTRACTION.apply(row.getCell(3)));
+                        }
                     }
 
-                    if (Objects.nonNull(testStep)) {
-                        testCase.addStep(testStep);
-                    }
+//                    List<String> parameters = Arrays.asList(VALUE_EXTRACTION.apply(row.getCell(2)).split(","));
+//                    List<Step> testSteps = utils.process(
+//                            VALUE_EXTRACTION.apply(row.getCell(0)),
+//                            VALUE_EXTRACTION.apply(row.getCell(1)),
+//                            parameters
+//                    );
+//                    testSteps.forEach(testCase::addStep);
+//
+//                    if (Objects.nonNull(testStep)) {
+//                        testCase.addStep(testStep);
+//                    }
 
                 }
             }
